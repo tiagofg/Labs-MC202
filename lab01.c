@@ -42,7 +42,10 @@ void gerarMatrizCaracol(float vetor[100], int m, int n){
 
     for(i = 0; i < m; i ++) {
         for(j = 0; j < n; j++) {
-            printf("%.1f ", matriz[i][j]);
+            printf("%.1f", matriz[i][j]);
+            if (j != n-1) {
+                printf(" ");
+            }
         }
         printf("\n");
     }
