@@ -9,34 +9,37 @@ void gerarMatrizCaracol(float vetor[100], int m, int n){
             matriz[i][j] = vetor[indiceVetor];
             i--;
             indiceVetor++;
-        }
+        }     
         i++;
         topo++;
         direita--;
         j--;
         while (j >= esquerda && indiceVetor < m * n) {
             matriz[i][j] = vetor[indiceVetor];
+	    matriz[i][j] = vetor[indiceVetor];
             j--;
             indiceVetor++;
         }
-        j++;
+	j++;
         esquerda++;
         i++;
         while (i <= base && indiceVetor < m * n) {
             matriz[i][j] = vetor[indiceVetor];
+	    matriz[i][j] = vetor[indiceVetor];
             i++;
             indiceVetor++;
-        }
+        }	
         i--;
-        base++;
+        base--;
         j++;
         while (j <= direita && indiceVetor < m * n) {
             matriz[i][j] = vetor[indiceVetor];
+	    matriz[i][j] = vetor[indiceVetor];
             j++;
             indiceVetor++;
-        }
+        }	
         j--;
-        direita++;
+        direita--;
         i--;
     }
 
