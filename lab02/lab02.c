@@ -54,20 +54,14 @@ int main()
 	return 0;
 }
 
-/**
- * Esta função recebe como parâmetro um conjunto de variáveis que abstraem a
- * entrada do problema e realiza a bonificação salarial dos professores
- * conforme especificado no enunciado da tarefa.
- */
-
- int validar_desempenho(Aluno matriculados[], int n, float desempenho){
+ int validar_desempenho(Aluno matriculados[], int n, float desempenho){ //função para verificar o desempenho de todos os alunos matriculados em uma disciplina
      for (int i = 0; i < n; i++) {
          if (obter_desempenho(matriculados[i]) < desempenho) {
-             return 0;
+             return 0; //retorna 0 se a média de algum dos alunos for menor que a esperada
          }
      }
 
-     return 1;
+     return 1; //retorna 1 se todos os alunos estiverem acima da média esperada
  }
 
  float bonificacao(Aluno alunos[], int n, char disciplina[]) {
@@ -75,49 +69,31 @@ int main()
      int j = 0;
      for (int i = 0; i < n; i++) {
          if (validar_matricula(alunos[i], disciplina) == 1) {
-             alunosMatriculados[j++] = alunos[i];
+             alunosMatriculados[j++] = alunos[i]; //vetor com todos os alunos matriculados em uma disciplina
          }
      }
 
-     if (validar_desempenho(alunosMatriculados, j, 10.0) == 1) {
+     if (validar_desempenho(alunosMatriculados, j, 10.0) == 1) { //verificação de média 10
          return 0.15;
      }
-     else if (validar_desempenho(alunosMatriculados, j, 9.0) == 1) {
+     else if (validar_desempenho(alunosMatriculados, j, 9.0) == 1) { //verificação de média 9 ou superior
          return 0.1;
      }
-     else if (validar_desempenho(alunosMatriculados, j, 8.5) == 1) {
+     else if (validar_desempenho(alunosMatriculados, j, 8.5) == 1) { //verificação de média 8.5 ou superior
          return 0.05;
      }
 
-     return 0;
-
+     return 0; //retorna 0 se não houver nenhuma bonificação
  }
 
 
 void processar_aumento(Professor professores[], Aluno alunos[], int m, int n)
 {
-
-   /** ************************************************************************
-    *               ATENÇÃO: É preciso implementar esta função!               *
-    *********************************************************************** **/
-
-    // Esta função não devem acessar diretamente os campos de uma TAD (i.e.,
-    // os campos das estruturas do Professor ou Aluno, tais como 'disciplina').
-
-    // Para a implementação desta função você deverá fazer a chamada de funções
-    // que operação sobre os TADs (conforme os protótipos definidos nos arquivos
-    // de cabeçalho).
-
-    // Para a bonificação salarial, deverá chamar a função 'aplicar_aumento'.
-    // Obs.: a função devolve uma variável do tipo Professor na qual aplicou-se
-    // a bonificação salarial. No entanto, ESTÁ PROIBIDO A IMPRESSÃO DA SAÍDA
-    // NO ESCOPO DESTA FUNÇÃO. Você deverá sobrescrever a variável do vetor
-    // 'professores' que corresponde ao professor com a bonificação salarial.
-    char disciplina[MAXCHAR_CODIGO];
+    char disciplina[MAXCHAR_CODIGO]; //variável que armazena a disciplina de cada professor;
+    Professor professor; //variável para armazenar o professor que vai ser sobrescrito
     for (int i = 0; i < m; i++) {
-        Professor professor;
         obter_disciplina(professores[i], disciplina);
         professor = aplicar_aumento(professores[i], bonificacao(alunos, n, disciplina));
-        professores[i] = professor;
+        professores[i] = professor; //sobrescrevendo professor
     }
 }
