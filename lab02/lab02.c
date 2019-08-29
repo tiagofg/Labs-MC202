@@ -55,6 +55,10 @@ int main()
 }
 
  int validar_desempenho(Aluno matriculados[], int n, float desempenho){ //função para verificar o desempenho de todos os alunos matriculados em uma disciplina
+     if (n == 0) { //não tem nenhum aluno matriculado para validar desempenho
+         return 0;
+     }
+     
      for (int i = 0; i < n; i++) {
          if (obter_desempenho(matriculados[i]) < desempenho) {
              return 0; //retorna 0 se a média de algum dos alunos for menor que a esperada
