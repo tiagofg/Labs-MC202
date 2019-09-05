@@ -12,6 +12,8 @@ Leitor criar_leitor(const char* nome, int e)
     leitor.devolucoes = malloc(e * sizeof(int));
     leitor.num_restituicoes = 0;
     leitor.num_devolucoes = 0;
+
+    return leitor;
 }
 
 void desalocar_memoria(Leitor* leitor)
@@ -21,35 +23,35 @@ void desalocar_memoria(Leitor* leitor)
 
 const char* obter_nome(const Leitor* leitor)
 {
-    return *leitor.nome;
+    return leitor->nome;
 }
 
 void registrar_restituicao(Leitor* leitor, int i)
 {
-    *leitor.restituicoes[num_restituicoes++] = i;
+    leitor->restituicoes[leitor->num_restituicoes++] = i;
 }
 
 void registrar_devolucao(Leitor* leitor, int i)
 {
-    *leitor.devolucoes[num_devolucoes++] = i;
+    leitor->devolucoes[leitor->num_devolucoes++] = i;
 }
 
 const int* obter_restituicoes(const Leitor* leitor)
 {
-    return *leitor.restituicoes;
+    return leitor->restituicoes;
 }
 
 const int* obter_devolucoes(const Leitor* leitor)
 {
-    return *leitor.devolucoes;
+    return leitor->devolucoes;
 }
 
 int obter_num_restituicoes(const Leitor* leitor)
 {
-    return *leitor.num_restituicoes;
+    return leitor->num_restituicoes;
 }
 
 int obter_num_devolucoes(const Leitor* leitor)
 {
-    return *leitor.obter_num_devolucoes;
+    return leitor->num_devolucoes;
 }

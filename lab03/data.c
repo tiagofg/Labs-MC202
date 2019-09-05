@@ -3,7 +3,7 @@
 Data criar_data(int dia, int mes, int ano)
 {
    Data data;
-   
+
    data.dia = dia;
    data.mes = mes;
    data.ano = ano;
@@ -13,7 +13,7 @@ Data criar_data(int dia, int mes, int ano)
 
 int eh_nula(Data data)
 {
-   if (data == NULL) {
+   if (data.dia == 0 && data.mes == 0 && data.ano == 0) {
        return 1;
    }
 

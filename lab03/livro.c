@@ -14,10 +14,10 @@ Livro criar_livro(const char* titulo, Data emprestimo)
 
 Data obter_data_emprestimo(const Livro* livro)
 {
-    return *livro.emprestimo;
+    return livro->emprestimo;
 }
 
 const char* obter_titulo(const Livro* livro)
 {
-   return *livro.titulo;
+   return livro->titulo;
 }
