@@ -9,12 +9,15 @@ void obter_livros(Livro* livros, int m, char* titulo) {
     Livro livro;
 
     for (int i = 0; i < m; i++){
+        //leitura da data de devolução e do título
         scanf("%d-%d-%d\n", &dia, &mes, &ano);
-	data = criar_data(dia, mes, ano);
-	
-        scanf(" %[^\n]", titulo);        
+        scanf(" %[^\n]", titulo);
+
+        //criação de data e livro
+	    data = criar_data(dia, mes, ano);
         livro = criar_livro(titulo, data);
 
+        //atribuição no vetor de livros
         livros[i] = livro;
     }
 }
@@ -23,17 +26,20 @@ void obter_leitores(Leitor* leitores, int n, char* nome) {
     int e, num_livro;
     Leitor leitor;
 
-    for (int i = 0; i < n; i++){	       
+    for (int i = 0; i < n; i++){
+        //leitura do nome e da quantidade de registros
         scanf("%s ", nome);
-	
         scanf("%d ", &e);
 
+        //criação do leitor
         leitor = criar_leitor(nome, e);
 
         for (int j = 0; j < e; j ++)
         {
+            //leitura do número do livro
             scanf("%d ", &num_livro);
 
+            //condição para saber se o livro está sendo restituído ou devolvido
             if (num_livro > 0) {
                 registrar_restituicao(&leitor, num_livro);
             }
@@ -42,25 +48,44 @@ void obter_leitores(Leitor* leitores, int n, char* nome) {
             }
         }
 
+        //atribuição no vetor de leitores
         leitores[i] = leitor;
     }
 }
 
 void obter_saida(Livro* livros, Leitor* leitores, int m, int n, Data dataConsulta) {
-  for (int i = 0; i < n; i++) {
-      const int* restituicoes = obter_restituicoes(&leitores[i]);
-      
-      for (int j = 0; i < obter_num_restituicoes(&leitores[i]); j++) {
-	  int num_livro = restituicoes[j];
+    for (int i = 0; i < n; i++) {
+        //obtenção dos vetores de restituições e devoluções
+        const int* restituicoes = obter_restituicoes(&leitores[i]);
+        const int* devolucoes = obter_devolucoes(&leitores[i]);
 
-	  if (eh_menor_que(obter_data_emprestimo(&livros[num_livro - 1]), dataConsulta) == 1) {
-	      printf("Restituição: %s\n", obter_titulo(&livros[num_livro - 1]));
-	  }    
-          
-      }
-  }
-  
-} 
+        printf("%s\n", obter_nome(&leitores[i])); //print do nome do leitor
+
+        for (int j = 0; j < obter_num_restituicoes(&leitores[i]); j++) {
+            //obtenção de número do livro e data de empréstimo
+            int num_livro = restituicoes[j];
+            Data data_emprestimo = obter_data_emprestimo(&livros[num_livro - 1]);
+
+            //regra para escrever a restituição ou não
+    	    if (eh_menor_que(data_emprestimo, dataConsulta) == 1 && eh_nula(data_emprestimo) == 0) {
+    	        printf("Restituição: %s\n", obter_titulo(&livros[num_livro - 1]));
+    	    }
+
+        }
+
+        for (int k = 0; k < obter_num_devolucoes(&leitores[i]); k++) {
+            //obtenção de número do livro e data de empréstimo
+    	    int num_livro = devolucoes[k] * -1;
+            Data data_emprestimo = obter_data_emprestimo(&livros[num_livro - 1]);
+
+            //regra para escrever a devolução ou não
+    	    if (eh_menor_que(data_emprestimo, dataConsulta) == 1 && eh_nula(data_emprestimo) == 0) {
+    	        printf("Devolução: %s\n", obter_titulo(&livros[num_livro - 1]));
+    	    }
+
+        }
+    }
+}
 
 int main()
 {
@@ -70,33 +95,22 @@ int main()
     Livro* livros = NULL;        // ponteiro para o vetor de livros
     Leitor* leitores = NULL;     // ponteiro para o vetor de leitores
 
-   /** ************************************************************************
-    *               ATENÇÃO: É preciso implementar esta função!               *
-    *********************************************************************** **/
-
-    // Esta função não devem acessar diretamente os campos de um TAD, i.e.,
-    // os campos das estruturas Livro, Leitor e Data.
-
-    // Para a implementação desta função você deverá fazer a chamada de funções
-    // que operação sobre os TADs (conforme os protótipos definidos nos arquivos
-    // de cabeçalho).
     int m, n;
     scanf("%d %d\n", &m, &n);
-    printf("m: %d", m);
-    printf("n: %d\n", n);
 
-    livros = malloc(m * sizeof(Livro));
-    leitores = malloc(n * sizeof(Leitor));
+    livros = malloc(m * sizeof(Livro)); //alocação de memória para vetor de livros
+    leitores = malloc(n * sizeof(Leitor)); //alocação de memória para vetor de leitores
 
-    obter_livros(livros, m, titulo);
-    obter_leitores(leitores, n, nome);
+    obter_livros(livros, m, titulo); //método para ler informações de livros
+    obter_leitores(leitores, n, nome); //método para ler informações de leitores
 
+    //leitura da data de consulta
     int dia, mes, ano;
-    Data dataConsulta;
+    Data data_consulta;
     scanf("%d-%d-%d\n", &dia, &mes, &ano);
-    dataConsulta = criar_data(dia, mes, ano);
+    data_consulta = criar_data(dia, mes, ano);
 
-    obter_saida(livros, leitores, m, n, dataConsulta);
+    obter_saida(livros, leitores, m, n, data_consulta); //método que obtem o resultado da saída
 
     free(livros);
     free(leitores);
