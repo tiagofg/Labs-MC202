@@ -70,7 +70,7 @@ void caminho_espada(char** labirinto, char** espada, int i_entrada, int j_entrad
 void printar_labirinto(char** labirinto, int m, int n) {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
-            printf("%c ", labirinto[i][j]);
+            printf("%c", labirinto[i][j]);
         }
 
         printf("\n");
@@ -81,7 +81,8 @@ int main()
 {
    int m, n;
 
-   scanf("%d %d", &m, &n);
+   scanf("%d %d ", &m, &n);
+   printf("%d %d \n", m, n);
 
    char** labirinto = (char**) malloc(m * sizeof(char*));
    for (int i = 0; i < n; i++) {
@@ -101,8 +102,11 @@ int main()
    for (int i = 0; i < m; i++) {
        for (int j = 0; j < n; j++) {
             scanf("%c", &labirinto[i][j]);
+            printf("%c (%d, %d) \n", labirinto[i][j], i, j);
        }
    }
+
+   //printar_labirinto(labirinto, m, n);
 
    int entrada;
 
