@@ -31,34 +31,39 @@ void zerar_caminho(char** caminho, int i, int j) {
     }
 }
 
-int buscar_espada(char** labirinto, char** espada, int i, int j, int m, int n) {
-    if (eh_espada(labirinto, i, j + 1) == 1 || eh_espada(labirinto, i + 1, j) == 1 || eh_espada(labirinto, i, j - 1) == 1 || eh_espada(labirinto, i - 1, j) == 1) {
+int buscar_espada(char** labirinto, char** espada, int i, int j, int m, int n) {    
+    printf("%d %d %c \n", i, j, labirinto[i][j]);
+
+    if (eh_espada(labirinto, i, j) == 1)
+    {
         return 1;
     }
 
-    if (j + 1 < n && eh_parede(labirinto, i, j + 1) == 0 && eh_minotauro(labirinto, i, j + 1) == 0) {
-        printf("%d %d %s\n", i, j, "direita");
-        espada[i][j + 1] = '*';
-        buscar_espada(labirinto, espada, i, j + 1, m , n);
-    }
-    else if (i + 1 < m && eh_parede(labirinto, i + 1, j) == 0 && eh_minotauro(labirinto, i + 1, j) == 0) {
-        printf("%d %d %s\n", i, j, "baixo");
-        espada[i + 1][j] = '*';
-        buscar_espada(labirinto, espada, i + 1, j, m , n);
-    }
-    else if (j - 1 >= 0 && eh_parede(labirinto, i, j - 1) == 0 && eh_minotauro(labirinto, i, j - 1) == 0) {
-        printf("%d %d %s\n", i, j, "esquerda");
-        espada[i][j - 1] = '*';
-        buscar_espada(labirinto, espada, i, j - 1, m , n);
-    }
-    else if (i - 1 >= 0 && eh_parede(labirinto, i - 1, j) == 0 && eh_minotauro(labirinto, i - 1, j) == 0) {
-        printf("%d %d %s\n", i, j, "cima");
-        espada[i - 1][j] = '*';
-        buscar_espada(labirinto, espada, i - 1, j, m , n);
+
+    if(i >= 0 && j >= 0 && i < m && j < n && eh_parede(labirinto, i, j) == 0 && eh_minotauro(labirinto, i, j) == 0)
+    {
+        espada[i][j] = '*';
+
+        if (buscar_espada(labirinto, espada, i, j + 1, m, n) == 1) {
+            return 1;
+        }    
+        
+        if (buscar_espada(labirinto, espada, i + 1, j, m, n) == 1) {
+            return 1;
+        }
+        
+        if (buscar_espada(labirinto, espada, i, j - 1, m, n) == 1) {
+            return 1;
+        }    
+        
+        if (buscar_espada(labirinto, espada, i - 1, j, m, n) == 1) {
+            return 1;
+        }    
+        
+        espada[i][j] = ' ';
     }
 
     return 0;
-
 }
 
 void caminho_espada(char** labirinto, char** espada, int i_entrada, int j_entrada, int m, int n) {
