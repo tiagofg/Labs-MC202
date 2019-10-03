@@ -3,22 +3,24 @@
 
 #include "lista.h"
 
-No* criar_lista(int tamanho) {
+Lista* criar_lista(int tamanho) {
+    Lista* lista = malloc(sizeof(Lista));
+
     No* no = malloc(sizeof(No));
 
     no->inicio_segmento = 0;
     no->tamanho_segmento = tamanho;
-    // no->tamanho_lista = tamanho;
     no->anterior = NULL;
     no->proximo = NULL;
 
-    // inicio = no;
+    lista->inicio = no;
+    lista->dados = no;
 
-    return no;
+    return lista;
 }
 
-void inserir_no(No** lista, No* no){
-    No* proximo = *lista;
+void inserir_no(Lista* lista, No* no){
+    No* proximo = lista->inicio;
     No* anterior = NULL;
     
     while (proximo != NULL){
@@ -43,11 +45,12 @@ void inserir_no(No** lista, No* no){
         //     break;
         // }
         if (proximo->inicio_segmento > no->inicio_segmento) {
+            // printf("Próximo: %d %d \n", proximo->inicio_segmento, proximo->tamanho_segmento);
             break;
         }
 
         anterior = proximo;
-        proximo = (*lista)->proximo;
+        proximo = proximo->proximo;
     }
 
     no->proximo = proximo;
@@ -55,6 +58,8 @@ void inserir_no(No** lista, No* no){
 
     if (anterior != NULL) {
         anterior->proximo = no;
+    } else {
+        lista->inicio = no;
     }
     if (proximo != NULL) {
         proximo->anterior = no;
@@ -62,27 +67,32 @@ void inserir_no(No** lista, No* no){
 }
 
 void remover_no(No* no) {
-    no->anterior->proximo = no->proximo;
-    no->proximo->anterior = no->anterior;
+    if (no->anterior != NULL) {
+        no->anterior->proximo = no->proximo;
+    }
+    
+    if (no->proximo != NULL) {
+        no->proximo->anterior = no->anterior;
+    }
 
     free(no);
 }
 
-void imprimir_heap(No* lista){
+void imprimir_heap(Lista* lista){
     printf("heap: \n");
 
     No* atual;
-    for (atual = lista; atual != NULL; atual = lista->proximo){
+    for (atual = lista->inicio; atual != NULL; atual = atual->proximo){
         printf("%d %d\n", atual->inicio_segmento, atual->tamanho_segmento);
     }
 }
 
-No* get_melhor_heap(No* heap, int tamanho){
+No* get_melhor_heap(Lista* heap, int tamanho){
     No* melhor_heap;
     int menor_sobra = tamanho;
 
     No* atual;
-    for (atual = heap; atual != NULL; atual = heap->proximo){
+    for (atual = heap->inicio; atual != NULL; atual = atual->proximo){
         if (atual->tamanho_segmento >= tamanho && atual->tamanho_segmento - tamanho < menor_sobra) {
             melhor_heap = atual;
             menor_sobra = atual->tamanho_segmento - tamanho;
@@ -92,12 +102,30 @@ No* get_melhor_heap(No* heap, int tamanho){
     return melhor_heap;
 }
 
-void alocar_memoria(No* heap, int tamanho) {
-    No* no_alocacao = malloc(sizeof(No));
+void juntar_segmentos_se_possivel(Lista* heap) {
+    No* atual = heap->inicio;
+    No* proximo;
 
-    if (heap->anterior == NULL && heap->proximo == NULL) {
-        heap->inicio_segmento = heap->inicio_segmento + tamanho;
-        heap->tamanho_segmento = heap->tamanho_segmento - tamanho;
+    while (atual->proximo != NULL) {
+        proximo = atual->proximo;
+
+        if (atual->inicio_segmento + atual->tamanho_segmento >= proximo->inicio_segmento) {
+            atual->tamanho_segmento = atual->tamanho_segmento + proximo->tamanho_segmento;
+            remover_no(proximo); 
+            continue;
+        }
+        
+        atual = atual->proximo;
+    }
+}
+
+void alocar_memoria(Lista* heap, int tamanho) {
+    No* no_alocacao = malloc(sizeof(No));
+    No* inicio = heap->inicio;
+
+    if (inicio->anterior == NULL && inicio->proximo == NULL) {
+        inicio->inicio_segmento = inicio->inicio_segmento + tamanho;
+        inicio->tamanho_segmento = inicio->tamanho_segmento - tamanho;
     } else {
         no_alocacao = get_melhor_heap(heap, tamanho);
 
@@ -110,7 +138,7 @@ void alocar_memoria(No* heap, int tamanho) {
     }
 }
 
-void desalocar_memoria(No* heap, int endereco, int tamanho) {
+void desalocar_memoria(Lista* heap, int endereco, int tamanho) {
     No* novo_heap = malloc(sizeof(No));
 
     novo_heap->inicio_segmento = endereco;
@@ -118,19 +146,17 @@ void desalocar_memoria(No* heap, int endereco, int tamanho) {
     novo_heap->anterior = NULL;
     novo_heap->proximo = NULL;
 
-    inserir_no(&heap, novo_heap);
+    inserir_no(heap, novo_heap);
+
+    juntar_segmentos_se_possivel(heap);
 }
 
-void realocar_memoria(No* heap, int endereco, int tamanho, int novo_tamanho) {
+void realocar_memoria(Lista* heap, int endereco, int tamanho, int novo_tamanho) {
     No* atual;
-    for (atual = heap; atual != NULL; atual = heap->proximo){
-        if (atual->inicio_segmento == endereco) {
-            if (novo_tamanho <= tamanho) {
-                atual->tamanho_segmento = novo_tamanho;
-            } else {
-                remover_no(atual);
-                alocar_memoria(heap, novo_tamanho);
-            }
+    for (atual = heap->inicio; atual != NULL; atual = atual->proximo){
+        if (endereco + novo_tamanho >= atual->inicio_segmento && endereco + novo_tamanho <= atual->tamanho_segmento) {
+            desalocar_memoria(heap, endereco, tamanho);
+            alocar_memoria(heap, novo_tamanho);
             break;
         }
     }

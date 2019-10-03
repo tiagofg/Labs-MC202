@@ -3,7 +3,7 @@
 
 #include "lista.h"
 
-void ler_operacoes(int m, No* heap) {
+void ler_operacoes(int m, Lista* heap) {
     char operacao;
     int endereco_segmento, tamanho_segmento, novo_tamanho_segmento;
 
@@ -18,6 +18,7 @@ void ler_operacoes(int m, No* heap) {
             desalocar_memoria(heap, endereco_segmento, tamanho_segmento);
         } else if (operacao == 'R') {
             scanf("%d %d %d\n", &endereco_segmento, &tamanho_segmento, &novo_tamanho_segmento);
+            realocar_memoria(heap, endereco_segmento, tamanho_segmento, novo_tamanho_segmento);
         } else if (operacao == 'P') {
             imprimir_heap(heap);
         }
@@ -30,7 +31,7 @@ int main()
 
     scanf("%d %d", &m, &n);
 
-    No* heap = criar_lista(n);
+    Lista* heap = criar_lista(n);
 
     ler_operacoes(m, heap);
 

@@ -7,26 +7,32 @@
 typedef struct No {
     int inicio_segmento;
     int tamanho_segmento;
-    // int tamanho_lista;
 
     struct No* anterior;
     struct No* proximo;
 } No;
 
+typedef struct {
+    No* inicio;
+    No* dados;
+} Lista;
+
 // No* inicio;
 
-No* criar_lista();
+Lista* criar_lista();
 
-void inserir_no(No** lista, No* no);
+void inserir_no(Lista* lista, No* no);
 
 void remover_no(No* no);
 
-void imprimir_heap(No* lista);
+void imprimir_heap(Lista* lista);
 
-No* get_melhor_heap(No* heap, int tamanho);
+No* get_melhor_heap(Lista* heap, int tamanho);
 
-void alocar_memoria(No* heap, int tamanho);
+void juntar_segmentos_se_possivel(Lista* heap);
 
-void desalocar_memoria(No* heap, int endereco, int tamanho);
+void alocar_memoria(Lista* heap, int tamanho);
 
-void realocar_memoria(No* heap, int endereco, int tamanho, int novo_tamanho);
+void desalocar_memoria(Lista* heap, int endereco, int tamanho);
+
+void realocar_memoria(Lista* heap, int endereco, int tamanho, int novo_tamanho);
