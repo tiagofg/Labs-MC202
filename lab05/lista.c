@@ -20,6 +20,7 @@ No* criar_lista(int tamanho) {
 void inserir_no(No** lista, No* no){
     No* proximo = *lista;
     No* anterior = NULL;
+    
     while (proximo != NULL){
         // // printf("Início: %d %d\n", atual->inicio_segmento, no->inicio_segmento);
         // // printf("Tamanho: %d %d\n", atual->tamanho_segmento, no->tamanho_segmento);
@@ -41,16 +42,20 @@ void inserir_no(No** lista, No* no){
         //     printf("Pode inserir\n");
         //     break;
         // }
-        anterior = proximo;
-        proximo = (*lista)->proximo;
         if (proximo->inicio_segmento > no->inicio_segmento) {
             break;
         }
+
+        anterior = proximo;
+        proximo = (*lista)->proximo;
     }
 
     no->proximo = proximo;
     no->anterior = anterior;
-    anterior->proximo = no;
+
+    if (anterior != NULL) {
+        anterior->proximo = no;
+    }
     if (proximo != NULL) {
         proximo->anterior = no;
     }
