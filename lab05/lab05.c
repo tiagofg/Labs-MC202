@@ -7,18 +7,24 @@ void ler_operacoes(int m, Lista* heap) {
     char operacao;
     int endereco_segmento, tamanho_segmento, novo_tamanho_segmento;
 
-    for (int i = 0; i < m; i++) {
+    for (int i = 0; i <= m; i++) {
         scanf("%c ", &operacao);
 
         if (operacao == 'A') {
             scanf("%d\n", &tamanho_segmento);
+            // printf("Aloca: %d \n", tamanho_segmento);
             alocar_memoria(heap, tamanho_segmento);
+            // imprimir_heap(heap);
         } else if (operacao == 'D') {
             scanf("%d %d\n", &endereco_segmento, &tamanho_segmento);
+            // printf("Desaloca: %d, %d \n", endereco_segmento, tamanho_segmento);
             desalocar_memoria(heap, endereco_segmento, tamanho_segmento);
+            // imprimir_heap(heap);
         } else if (operacao == 'R') {
             scanf("%d %d %d\n", &endereco_segmento, &tamanho_segmento, &novo_tamanho_segmento);
+            // printf("Realoca: %d, %d, %d \n", endereco_segmento, tamanho_segmento, novo_tamanho_segmento);
             realocar_memoria(heap, endereco_segmento, tamanho_segmento, novo_tamanho_segmento);
+            // imprimir_heap(heap);
         } else if (operacao == 'P') {
             imprimir_heap(heap);
         }

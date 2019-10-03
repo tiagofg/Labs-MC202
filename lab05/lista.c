@@ -22,51 +22,39 @@ Lista* criar_lista(int tamanho) {
 void inserir_no(Lista* lista, No* no){
     No* proximo = lista->inicio;
     No* anterior = NULL;
-    
-    while (proximo != NULL){
-        // // printf("Início: %d %d\n", atual->inicio_segmento, no->inicio_segmento);
-        // // printf("Tamanho: %d %d\n", atual->tamanho_segmento, no->tamanho_segmento);
-        // // printf("Anterior: %p\n", atual->anterior);
-        // // printf("Próximo: %p\n", atual->proximo);
-        // if (atual->inicio_segmento > no->inicio_segmento) {
-        //     printf("Anterior atual: %p\n", atual->anterior);
-        //     printf("Anterior nó: %p\n", no->anterior);
-        //     printf("Nó: %p\n", no);
-        //     // if (atual == inicio) {
-        //     //     no->anterior = inicio->anterior;
-        //     //     inicio = no;
-        //     //     atual->anterior = inicio;
-        //     // } else {
-        //     no->anterior = atual->anterior;
-        //     atual->anterior = no;
-        //     // }
-        //     no->proximo = atual;
-        //     printf("Pode inserir\n");
-        //     break;
-        // }
-        if (proximo->inicio_segmento > no->inicio_segmento) {
-            // printf("Próximo: %d %d \n", proximo->inicio_segmento, proximo->tamanho_segmento);
-            break;
+
+    if (lista->inicio == NULL) {
+        lista->inicio = no;
+    } else {    
+        while (proximo != NULL){
+            if (proximo->inicio_segmento > no->inicio_segmento) {
+                break;
+            }
+
+            anterior = proximo;
+            proximo = proximo->proximo;
         }
 
-        anterior = proximo;
-        proximo = proximo->proximo;
-    }
+        no->proximo = proximo;
+        no->anterior = anterior;
 
-    no->proximo = proximo;
-    no->anterior = anterior;
+        if (anterior != NULL) {
+            anterior->proximo = no;
+        } else {
+            lista->inicio = no;
+        }
 
-    if (anterior != NULL) {
-        anterior->proximo = no;
-    } else {
-        lista->inicio = no;
-    }
-    if (proximo != NULL) {
-        proximo->anterior = no;
+        if (proximo != NULL) {
+            proximo->anterior = no;
+        }
     }
 }
 
-void remover_no(No* no) {
+void remover_no(Lista* heap, No* no) {
+    if (heap->inicio == no){
+        heap->inicio = no->proximo;
+    }
+
     if (no->anterior != NULL) {
         no->anterior->proximo = no->proximo;
     }
@@ -79,7 +67,7 @@ void remover_no(No* no) {
 }
 
 void imprimir_heap(Lista* lista){
-    printf("heap: \n");
+    printf("heap:\n");
 
     No* atual;
     for (atual = lista->inicio; atual != NULL; atual = atual->proximo){
@@ -111,7 +99,7 @@ void juntar_segmentos_se_possivel(Lista* heap) {
 
         if (atual->inicio_segmento + atual->tamanho_segmento >= proximo->inicio_segmento) {
             atual->tamanho_segmento = atual->tamanho_segmento + proximo->tamanho_segmento;
-            remover_no(proximo); 
+            remover_no(heap, proximo); 
             continue;
         }
         
@@ -119,18 +107,37 @@ void juntar_segmentos_se_possivel(Lista* heap) {
     }
 }
 
+int esta_livre(Lista* heap, int endereco, int tamanho) {
+    No* atual;
+    for (atual = heap->inicio; atual != NULL; atual = atual->proximo) {
+        // printf("Endereço + tamanho: %d \n", endereco + tamanho);
+        // printf("Início segmento %d \n", atual->inicio_segmento);
+        // printf("Tamanho segmento: %d \n", atual->tamanho_segmento);
+        if (endereco + tamanho >= atual->inicio_segmento && endereco + tamanho <= atual->inicio_segmento + atual->tamanho_segmento) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+
 void alocar_memoria(Lista* heap, int tamanho) {
     No* no_alocacao = malloc(sizeof(No));
     No* inicio = heap->inicio;
 
     if (inicio->anterior == NULL && inicio->proximo == NULL) {
-        inicio->inicio_segmento = inicio->inicio_segmento + tamanho;
-        inicio->tamanho_segmento = inicio->tamanho_segmento - tamanho;
+        if (inicio->tamanho_segmento - tamanho == 0) {
+            remover_no(heap, inicio);
+        } else {   
+            inicio->inicio_segmento = inicio->inicio_segmento + tamanho;
+            inicio->tamanho_segmento = inicio->tamanho_segmento - tamanho;
+        }
     } else {
         no_alocacao = get_melhor_heap(heap, tamanho);
 
         if (no_alocacao->tamanho_segmento - tamanho == 0){
-            remover_no(no_alocacao);
+            remover_no(heap, no_alocacao);
         } else {
             no_alocacao->inicio_segmento = no_alocacao->inicio_segmento + tamanho;
             no_alocacao->tamanho_segmento = no_alocacao->tamanho_segmento - tamanho;
@@ -152,12 +159,25 @@ void desalocar_memoria(Lista* heap, int endereco, int tamanho) {
 }
 
 void realocar_memoria(Lista* heap, int endereco, int tamanho, int novo_tamanho) {
-    No* atual;
-    for (atual = heap->inicio; atual != NULL; atual = atual->proximo){
-        if (endereco + novo_tamanho >= atual->inicio_segmento && endereco + novo_tamanho <= atual->tamanho_segmento) {
-            desalocar_memoria(heap, endereco, tamanho);
-            alocar_memoria(heap, novo_tamanho);
-            break;
+    if (novo_tamanho < tamanho) {
+        desalocar_memoria(heap, endereco + novo_tamanho, tamanho - novo_tamanho);
+    } else if (esta_livre(heap, endereco, novo_tamanho) == 1) {
+        No* atual;
+        for (atual = heap->inicio; atual != NULL; atual = atual->proximo){
+            if (endereco + tamanho >= atual->inicio_segmento && endereco + tamanho <= atual->inicio_segmento + atual->tamanho_segmento) {
+                if (atual->tamanho_segmento - (novo_tamanho - tamanho) == 0) {
+                    remover_no(heap, atual);
+                } else {
+                    atual->inicio_segmento = endereco + novo_tamanho;
+                    atual->tamanho_segmento = atual->tamanho_segmento - (novo_tamanho - tamanho);
+                }
+            }
         }
+    } else {
+        // printf("Desalocar: %d, %d \n", endereco, tamanho);
+        desalocar_memoria(heap, endereco, tamanho);
+        // printf("Alocar: %d \n", novo_tamanho);
+        alocar_memoria(heap, novo_tamanho);
+        // imprimir_heap(heap);
     }
 }

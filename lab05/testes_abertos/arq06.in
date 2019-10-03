@@ -24,7 +24,7 @@ D 16 15
 R 0 7 18
 A 10
 P
-R 18 10 19
+R 18 10 19 //Começa a dar errado aqui
 A 2
 R 0 18 9
 D 0 9

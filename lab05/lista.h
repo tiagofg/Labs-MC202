@@ -17,19 +17,19 @@ typedef struct {
     No* dados;
 } Lista;
 
-// No* inicio;
-
 Lista* criar_lista();
 
 void inserir_no(Lista* lista, No* no);
 
-void remover_no(No* no);
+void remover_no(Lista* heap, No* no);
 
 void imprimir_heap(Lista* lista);
 
 No* get_melhor_heap(Lista* heap, int tamanho);
 
 void juntar_segmentos_se_possivel(Lista* heap);
+
+int esta_livre(Lista* heap, int endereco, int tamanho);
 
 void alocar_memoria(Lista* heap, int tamanho);
 
