@@ -18,7 +18,11 @@ void empilhar(Pilha* pilha, int num);
 
 int desempilhar(Pilha* pilha);
 
-void remover_menor_dado(Pilha* pilha);
+Pilha* inverter_pilha(Pilha* pilha);
+
+void find_maior_valor(Pilha* pilha, int n);
+
+int get_valor_sequencia(Pilha* pilha);
 
 void imprimir_pilha(Pilha* pilha);
 

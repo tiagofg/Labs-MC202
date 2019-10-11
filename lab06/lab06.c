@@ -8,35 +8,41 @@
 
 int main()
 {
-   int m, n;
+    int m, n;
 
-   scanf("%d", &m);
+    scanf("%d\n", &m);
 
-   char* sequencia = malloc(MAX_SEQUENCIA * sizeof(char));
-   int num_sequencia;
+    char caractere_sequencia;
+    int num_sequencia;
 
-   Pilha* pilha = criar_pilha();
+    Pilha *pilha = criar_pilha();
 
-   for (int i = 0; i < m; i++) {
-       scanf("%s", sequencia);
+    for (int i = 0; i < m; i++)
+    {
+        caractere_sequencia = 0;
 
-       for (int j = 0; j < strlen(sequencia); j++) {
-           num_sequencia = (int) sequencia[j] - '0';
-           empilhar(pilha, num_sequencia);
-       }
+        while (caractere_sequencia != ' ') {
+            scanf("%c", &caractere_sequencia);
+            num_sequencia = (int) caractere_sequencia - 48;
+            if (num_sequencia >= 0) {
+                empilhar(pilha, num_sequencia);
+            }
+        }
 
-       scanf("%d\n", &n);
+        pilha = inverter_pilha(pilha);
 
-       // for (int k = 0; k < n; k++) {
-           remover_menor_dado(pilha);
-       // }
+        scanf("%d", &n);
 
-       imprimir_pilha(pilha);
+        find_maior_valor(pilha, n);   
 
-       limpar_pilha(pilha);
-   }
+        imprimir_pilha(pilha);
 
-   //desalocar memória
+        limpar_pilha(pilha);
+    }
 
-   return EXIT_SUCCESS;
+    limpar_pilha(pilha);
+
+    free(pilha);
+
+    return EXIT_SUCCESS;
 }

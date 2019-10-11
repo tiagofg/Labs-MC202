@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
+#include <string.h>
 
 #include "pilha.h"
 
@@ -28,43 +28,75 @@ int desempilhar(Pilha* pilha) {
     return dado_topo;
 }
 
-void remover_menor_dado(Pilha* pilha) {
-    Pilha* pilha_aux = malloc(sizeof(Pilha));
+Pilha* inverter_pilha(Pilha* pilha) {
+    Pilha* pilha_aux = criar_pilha();
     No* aux = pilha->topo;
-    int menor_dado = INT_MAX;
-    int dado_desempilhado;
 
     while (aux != NULL) {
-        dado_desempilhado = desempilhar(pilha);
-
-        if (dado_desempilhado < menor_dado) {
-            menor_dado = dado_desempilhado;
-        }
-
-        empilhar(pilha_aux, dado_desempilhado);
+        empilhar(pilha_aux, desempilhar(pilha));
         aux = pilha->topo;
     }
 
-    aux = pilha_aux->topo;
+    return pilha_aux;
+}
 
-    while (aux != NULL) {
-        dado_desempilhado = desempilhar(pilha_aux);
+void find_maior_valor(Pilha* pilha, int n) {
+    // Pilha* pilha_aux = criar_pilha();
+    // No* aux = pilha->topo;
+    // int menor_dado = INT_MAX;
+    // int dado_desempilhado;
 
-        if (dado_desempilhado != menor_dado) {
-            empilhar(pilha, dado_desempilhado);
-        }
+    // while (aux != NULL) {
+    //     dado_desempilhado = desempilhar(pilha);
 
-        aux = pilha_aux->topo;
-    }
+    //     if (dado_desempilhado < menor_dado) {
+    //         menor_dado = dado_desempilhado;
+    //     }
 
-    // printf("Pilha: \n");
-    // imprimir_pilha(pilha);
-    //
-    // printf("Pilha_aux: \n");
-    // imprimir_pilha(pilha_aux);
+    //     empilhar(pilha_aux, dado_desempilhado);
+    //     aux = pilha->topo;
+    // }
+
+    // aux = pilha_aux->topo;
+
+    // while (aux != NULL) {
+    //     dado_desempilhado = desempilhar(pilha_aux);
+
+    //     if (dado_desempilhado != menor_dado) {
+    //         empilhar(pilha, dado_desempilhado);
+    //     }
+
+    //     aux = pilha_aux->topo;
+    // }
 
     // free(pilha_aux);
+
+    printf("Valor sequencia: %d \n", get_valor_sequencia(pilha));
 }
+
+int get_valor_sequencia(Pilha* pilha) {
+    Pilha* pilha_aux = malloc(sizeof(pilha));
+    *pilha_aux = *pilha;
+    pilha_aux = inverter_pilha(pilha_aux);
+    // No* aux = pilha_aux->topo;
+    // char* sequencia = malloc(50 * sizeof(char));
+    // int tamanho_sequencia;
+
+    imprimir_pilha(pilha_aux);
+
+    // while (aux != NULL)
+    // {
+    //     // tamanho_sequencia = strlen(sequencia);
+    //     // sequencia[tamanho_sequencia] = (char) desempilhar(pilha_aux) + 48;
+    //     // sequencia[tamanho_sequencia] = '\0';
+    //     desempilhar(pilha_aux);
+    //     aux = pilha_aux->topo;
+    // }
+
+    // return atoi(sequencia);  
+    return 0;
+}
+
 
 void imprimir_pilha(Pilha* pilha) {
     No* aux = pilha->topo;
