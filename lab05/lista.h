@@ -14,7 +14,6 @@ typedef struct No {
 
 typedef struct {
     No* inicio;
-    No* dados;
 } Lista;
 
 Lista* criar_lista();
@@ -25,9 +24,11 @@ void remover_no(Lista* heap, No* no);
 
 void imprimir_heap(Lista* lista);
 
-No* get_melhor_heap(Lista* heap, int tamanho);
+No* get_melhor_segmento(Lista* heap, int tamanho);
 
 void juntar_segmentos_se_possivel(Lista* heap);
+
+int esta_em_algum_segmento(Lista* heap, int endereco);
 
 int esta_livre(Lista* heap, int endereco, int tamanho);
 
