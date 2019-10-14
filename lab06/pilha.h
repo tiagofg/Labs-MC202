@@ -27,7 +27,7 @@ void inserir_lista_na_pilha(Pilha* pilha, Lista* lista);
 
 void find_maior_valor(Pilha* pilha, Lista* lista, int n);
 
-int get_valor_sequencia(Pilha* pilha);
+long long int get_valor_sequencia(Pilha* pilha, char* sequencia);
 
 void imprimir_pilha(Pilha* pilha);
 

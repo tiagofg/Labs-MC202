@@ -5,7 +5,7 @@
 #include "lista.h"
 
 Lista* criar_lista() {
-    Lista* lista = malloc(sizeof(Lista)); //alocando memória da lista
+    Lista* lista = calloc(1, sizeof(Lista)); //alocando memória da lista
 
     //setando ínicio da lista
     lista->inicio = NULL;
@@ -13,37 +13,30 @@ Lista* criar_lista() {
     return lista;
 }
 
-void inserir_no(Lista* lista, char dado){
-    No_lista* anterior = lista->inicio;
-    No_lista* no = malloc(sizeof(No_lista));
-  
-    while (anterior != NULL && anterior->proximo != NULL){
-        anterior = anterior->proximo;
-    }
+void inserir_no_inicio(Lista* lista, char dado){
+    No_lista* no = calloc(1, sizeof(No_lista));
+    No_lista* inicio = lista->inicio;
 
-    no->proximo = NULL;
+    no->proximo = inicio;
     no->dado = dado;
     no->no_removido = 0;
-
-    if (anterior != NULL) {
-        anterior->proximo = no;
-    } else {
-        lista->inicio = no;
-    }
+    lista->inicio = no;
 }
 
 void remover_no(Lista* lista, No_lista* no) {
     No_lista* anterior = lista->inicio;
+    No_lista* proximo = no->proximo;
 
     if (lista->inicio == no){
-        lista->inicio = no->proximo;
+        lista->inicio = proximo;
     } else {
-        while (anterior->proximo != no) {
+        while (anterior->proximo != NULL) {
+            if (anterior->proximo == no) {
+                anterior->proximo = proximo;
+                break;
+            }
+
             anterior = anterior->proximo;
-        }
-        
-        if (anterior->proximo != NULL && anterior->proximo->proximo != NULL) {
-            anterior->proximo = anterior->proximo->proximo;
         }
     }
 

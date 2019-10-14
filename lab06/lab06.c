@@ -24,7 +24,7 @@ int main()
         while (caractere_sequencia != ' ') {
             scanf("%c", &caractere_sequencia);
             if (caractere_sequencia != ' ') {
-                inserir_no(lista, caractere_sequencia);
+                inserir_no_inicio(lista, caractere_sequencia);
             }
         }
 
@@ -32,15 +32,11 @@ int main()
 
         getchar();
 
-        find_maior_valor(pilha, lista, n);   
-
-        // imprimir_pilha(pilha);
-
+        find_maior_valor(pilha, lista, n); 
+        
         limpar_pilha(pilha);
         limpar_lista(lista);
     }
-
-    // limpar_pilha(pilha);
 
     free(pilha);
     free(lista);
