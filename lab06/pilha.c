@@ -11,98 +11,109 @@ Pilha* criar_pilha() {
     return pilha;
 }
 
-void empilhar(Pilha* pilha, int num) {
-    No* novo = malloc(sizeof(No));
+void empilhar(Pilha* pilha, char num) {
+    No_pilha* novo = malloc(sizeof(No_pilha));
     novo->dado = num;
     novo->proximo = pilha->topo;
     pilha->topo = novo;
+    pilha->tamanho++;
 }
 
 int desempilhar(Pilha* pilha) {
-    No* topo = pilha->topo;
+    No_pilha* topo = pilha->topo;
     int dado_topo = topo->dado;
 
     pilha->topo = pilha->topo->proximo;
+    pilha->tamanho--;
     free(topo);
 
     return dado_topo;
 }
 
-Pilha* inverter_pilha(Pilha* pilha) {
-    Pilha* pilha_aux = criar_pilha();
-    No* aux = pilha->topo;
+void inverter_pilha(Pilha* pilha) {
+    Pilha* pilha_invertida = criar_pilha();
+    No_pilha* aux = pilha->topo;
 
     while (aux != NULL) {
-        empilhar(pilha_aux, desempilhar(pilha));
+        empilhar(pilha_invertida, desempilhar(pilha));
         aux = pilha->topo;
     }
 
-    return pilha_aux;
+    *pilha = *pilha_invertida;
 }
 
-void find_maior_valor(Pilha* pilha, int n) {
-    // Pilha* pilha_aux = criar_pilha();
-    // No* aux = pilha->topo;
-    // int menor_dado = INT_MAX;
-    // int dado_desempilhado;
+void inserir_lista_na_pilha(Pilha* pilha, Lista* lista) {
+    No_lista* aux_lista = lista->inicio;
 
-    // while (aux != NULL) {
-    //     dado_desempilhado = desempilhar(pilha);
+    while (aux_lista != NULL)
+    {
+        if (aux_lista->no_removido != 1) {
+            printf("Inserir %c na pilha \n", aux_lista->dado);
+            empilhar(pilha, aux_lista->dado);
+        }
 
-    //     if (dado_desempilhado < menor_dado) {
-    //         menor_dado = dado_desempilhado;
-    //     }
+        aux_lista = aux_lista->proximo;
+    }
+    
+}
 
-    //     empilhar(pilha_aux, dado_desempilhado);
-    //     aux = pilha->topo;
+void find_maior_valor(Pilha* pilha, Lista* lista, int n) {  
+    // No_lista* no_maior_valor = NULL;
+    // No_lista* no_aux = lista->inicio;
+    // int maior_valor = 0;
+    int valor_sequencia = 0;
+    // Pilha* pilha_maior_sequencia = criar_pilha();
+
+    // while (no_aux != NULL)
+    // {
+    //     no_aux->no_removido = 1;
+    //     printf("%c \n", no_aux->dado);
+
+        inserir_lista_na_pilha(pilha, lista);
+        inverter_pilha(pilha);
+        // imprimir_pilha(pilha);
+
+        valor_sequencia = get_valor_sequencia(pilha);
+        printf("Valor sequência: %d \n", valor_sequencia);
+
+        // if (valor_sequencia > maior_valor) {
+        //     maior_valor = valor_sequencia;
+        //     *pilha_maior_sequencia = *pilha;
+        //     no_maior_valor = no_aux;
+        // }
+
+    //     no_aux->no_removido = 0;
+    //     no_aux = no_aux->proximo;
     // }
 
-    // aux = pilha_aux->topo;
-
-    // while (aux != NULL) {
-    //     dado_desempilhado = desempilhar(pilha_aux);
-
-    //     if (dado_desempilhado != menor_dado) {
-    //         empilhar(pilha, dado_desempilhado);
-    //     }
-
-    //     aux = pilha_aux->topo;
-    // }
-
-    // free(pilha_aux);
-
-    printf("Valor sequencia: %d \n", get_valor_sequencia(pilha));
+    // remover_no(lista, no_maior_valor);
 }
 
 int get_valor_sequencia(Pilha* pilha) {
-    Pilha* pilha_aux = malloc(sizeof(pilha));
+    Pilha* pilha_aux = criar_pilha();
     *pilha_aux = *pilha;
-    pilha_aux = inverter_pilha(pilha_aux);
-    // No* aux = pilha_aux->topo;
-    // char* sequencia = malloc(50 * sizeof(char));
-    // int tamanho_sequencia;
+    char* sequencia = malloc(pilha->tamanho * sizeof(char));
+    No_pilha* aux = pilha->topo;
+    int tamanho_sequencia = 0;
 
-    imprimir_pilha(pilha_aux);
+    while (aux != NULL)
+    {
+        tamanho_sequencia = strlen(sequencia);
+        printf("%d \n", tamanho_sequencia);
+        sequencia[tamanho_sequencia] = desempilhar(pilha);
+        sequencia[tamanho_sequencia + 1] = '\0';
+        aux = pilha->topo;
+    }    
 
-    // while (aux != NULL)
-    // {
-    //     // tamanho_sequencia = strlen(sequencia);
-    //     // sequencia[tamanho_sequencia] = (char) desempilhar(pilha_aux) + 48;
-    //     // sequencia[tamanho_sequencia] = '\0';
-    //     desempilhar(pilha_aux);
-    //     aux = pilha_aux->topo;
-    // }
-
-    // return atoi(sequencia);  
-    return 0;
+    return atoi(sequencia);
 }
 
 
 void imprimir_pilha(Pilha* pilha) {
-    No* aux = pilha->topo;
+    No_pilha* aux = pilha->topo;
 
     while (aux != NULL) {
-        printf("%d", aux->dado);
+        printf("%c", aux->dado);
         aux = aux->proximo;
     }
 
@@ -110,7 +121,7 @@ void imprimir_pilha(Pilha* pilha) {
 }
 
 void limpar_pilha(Pilha* pilha) {
-    No* aux = pilha->topo;
+    No_pilha* aux = pilha->topo;
 
     while (aux != NULL) {
         desempilhar(pilha);

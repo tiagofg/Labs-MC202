@@ -3,24 +3,29 @@
 
 #endif
 
-typedef struct No {
+#include "lista.h"
+
+typedef struct No_pilha {
     int dado;
-    struct No* proximo;
-} No;
+    struct No_pilha* proximo;
+} No_pilha;
 
 typedef struct {
-    No* topo;
+    No_pilha* topo;
+    int tamanho;
 } Pilha;
 
 Pilha* criar_pilha();
 
-void empilhar(Pilha* pilha, int num);
+void empilhar(Pilha* pilha, char num);
 
 int desempilhar(Pilha* pilha);
 
-Pilha* inverter_pilha(Pilha* pilha);
+void inverter_pilha(Pilha* pilha);
 
-void find_maior_valor(Pilha* pilha, int n);
+void inserir_lista_na_pilha(Pilha* pilha, Lista* lista);
+
+void find_maior_valor(Pilha* pilha, Lista* lista, int n);
 
 int get_valor_sequencia(Pilha* pilha);
 

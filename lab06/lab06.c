@@ -13,9 +13,9 @@ int main()
     scanf("%d\n", &m);
 
     char caractere_sequencia;
-    int num_sequencia;
 
-    Pilha *pilha = criar_pilha();
+    Pilha* pilha = criar_pilha();
+    Lista* lista = criar_lista();
 
     for (int i = 0; i < m; i++)
     {
@@ -23,26 +23,27 @@ int main()
 
         while (caractere_sequencia != ' ') {
             scanf("%c", &caractere_sequencia);
-            num_sequencia = (int) caractere_sequencia - 48;
-            if (num_sequencia >= 0) {
-                empilhar(pilha, num_sequencia);
+            if (caractere_sequencia != ' ') {
+                inserir_no(lista, caractere_sequencia);
             }
         }
 
-        pilha = inverter_pilha(pilha);
-
         scanf("%d", &n);
 
-        find_maior_valor(pilha, n);   
+        getchar();
 
-        imprimir_pilha(pilha);
+        find_maior_valor(pilha, lista, n);   
+
+        // imprimir_pilha(pilha);
 
         limpar_pilha(pilha);
+        limpar_lista(lista);
     }
 
-    limpar_pilha(pilha);
+    // limpar_pilha(pilha);
 
     free(pilha);
+    free(lista);
 
     return EXIT_SUCCESS;
 }
