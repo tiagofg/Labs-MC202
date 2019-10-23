@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "abb.h"
 
@@ -13,24 +14,23 @@ ArvoreBusca* criar_arvore() {
 No* inserir(ArvoreBusca* arvore, No* raiz, int identificador, char* dado) {
     No* novo;
 
-    if (arvore->raiz == NULL) {
+    if (raiz == NULL) {
         novo = malloc(sizeof(No));
         novo->esquerdo = novo->direito = NULL;
         novo->identificador = identificador;
-        novo->dado = dado;
-        arvore->raiz = novo;
-        return novo;
-    } else if (raiz == NULL) {
-        novo = malloc(sizeof(No));
-        novo->esquerdo = novo->direito = NULL;
-        novo->identificador = identificador;
-        novo->dado = dado;
+        novo->dado = malloc(8 * sizeof(char));
+        strcpy(novo->dado, dado);
+
+        if (arvore->raiz == NULL) {
+            arvore->raiz = novo;
+        }
+
         return novo;
     }
 
     if (identificador < raiz->identificador) {
         raiz->esquerdo = inserir(arvore, raiz->esquerdo, identificador, dado);
-    } else {
+    } else if (identificador > raiz->identificador) {
         raiz->direito = inserir(arvore, raiz->direito, identificador, dado);
     }
 
@@ -51,10 +51,13 @@ No* buscar(No* raiz, int identificador) {
 
 void imprimir_mensagem(ArvoreBusca* arvore, int qtde_dados) {
     No* buscado;
+    char* mensagem = malloc(8 * qtde_dados * sizeof(char));
 
     for (int i = 1; i <= qtde_dados; i++) {
         buscado = buscar(arvore->raiz, i);
 
-        printf("%s", buscado->dado);
+        strcat(mensagem, buscado->dado);
     }
+
+    printf("%s\n", mensagem);
 }
