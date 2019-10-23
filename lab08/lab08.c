@@ -6,7 +6,7 @@
 int main()
 {
     int identificador, ultimo_identificador = 0;
-    char* dado = malloc(8 * sizeof(dado));
+    char* dado = malloc(9 * sizeof(dado));
     ArvoreBusca* arvore = criar_arvore();
     // No* buscado;
 
@@ -27,7 +27,8 @@ int main()
 
     imprimir_mensagem(arvore, ultimo_identificador);
     free(dado);
-    free(arvore);
+    
+    destruir_arvore(arvore, ultimo_identificador);
 
    return EXIT_SUCCESS;
 }

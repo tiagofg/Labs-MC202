@@ -17,11 +17,9 @@ typedef struct ArvoreBusca {
 
 ArvoreBusca* criar_arvore();
 
-// void destruir_arvore(No* raiz);
+void destruir_arvore(ArvoreBusca* arvore, int qtde_dados);
 
 No* inserir(ArvoreBusca* arvore, No* raiz, int identificador, char* dado);
-
-// No* remover(No* raiz, int identificador);
 
 No* buscar(No* raiz, int identificador);
 

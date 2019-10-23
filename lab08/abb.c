@@ -11,6 +11,19 @@ ArvoreBusca* criar_arvore() {
     return arvore;
 }
 
+void destruir_arvore(ArvoreBusca* arvore, int qtde_dados) {
+    No* no_remocao;
+
+    for (int i = 1; i <= qtde_dados; i++) {
+        no_remocao = buscar(arvore->raiz, i);
+
+        //remover_no
+    }
+
+    free(arvore);
+}
+
+
 No* inserir(ArvoreBusca* arvore, No* raiz, int identificador, char* dado) {
     No* novo;
 
@@ -18,7 +31,7 @@ No* inserir(ArvoreBusca* arvore, No* raiz, int identificador, char* dado) {
         novo = malloc(sizeof(No));
         novo->esquerdo = novo->direito = NULL;
         novo->identificador = identificador;
-        novo->dado = malloc(8 * sizeof(char));
+        novo->dado = malloc(9 * sizeof(char));
         strcpy(novo->dado, dado);
 
         if (arvore->raiz == NULL) {
@@ -51,7 +64,7 @@ No* buscar(No* raiz, int identificador) {
 
 void imprimir_mensagem(ArvoreBusca* arvore, int qtde_dados) {
     No* buscado;
-    char* mensagem = malloc(8 * qtde_dados * sizeof(char));
+    char* mensagem = malloc(8 * qtde_dados * sizeof(char) + 1);
 
     for (int i = 1; i <= qtde_dados; i++) {
         buscado = buscar(arvore->raiz, i);
@@ -60,4 +73,5 @@ void imprimir_mensagem(ArvoreBusca* arvore, int qtde_dados) {
     }
 
     printf("%s\n", mensagem);
+    free(mensagem);
 }
