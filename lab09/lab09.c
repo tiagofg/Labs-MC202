@@ -13,7 +13,6 @@ int main()
 
       scanf("%d", &m);
 
-
    }
 
    return EXIT_SUCCESS;
