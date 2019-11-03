@@ -49,21 +49,28 @@ FilaPrioridade* criar_fila_prio(int tam) {
     return fila_prio;
 }
 
-void inserir(FilaPrioridade* fila_prio, Item* item, int tipo) {
-    fila_prio->vetor[fila_prio->n] = *item;
+void inserir(FilaPrioridade* fila_prio, Item item, int tipo) {
+    fila_prio->vetor[fila_prio->n] = item;
     fila_prio->n++;
 
     if (tipo == MAX) {
-        sobe_no_heap(fila_prio, fila_prio->n - 1);
+        sobe_no_heap(fila_prio, fila_prio->n - 1, tipo);
     } else if (tipo == MIN) {
-        desce_no_heap(fila_prio, fila_prio->n - 1);
+        sobe_no_heap(fila_prio, fila_prio->n - 1, tipo);
     }
 }
 
-void sobe_no_heap(FilaPrioridade* fila_prio, int k) {
-    if (k > 0 && fila_prio->vetor[PAI(k)].chave < fila_prio->vetor[k].chave) {
-        troca(&fila_prio->vetor[k], &fila_prio->vetor[PAI(k)]);
-        sobe_no_heap(fila_prio, PAI(k));
+void sobe_no_heap(FilaPrioridade* fila_prio, int k, int tipo) {
+    if (tipo == MAX) {
+        if (k > 0 && fila_prio->vetor[PAI(k)].chave < fila_prio->vetor[k].chave) {
+            troca(&fila_prio->vetor[k], &fila_prio->vetor[PAI(k)]);
+            sobe_no_heap(fila_prio, PAI(k), tipo);
+        }
+    } else if (tipo == MIN) {
+        if (k > 0 && fila_prio->vetor[PAI(k)].chave > fila_prio->vetor[k].chave) {
+            troca(&fila_prio->vetor[k], &fila_prio->vetor[PAI(k)]);
+            sobe_no_heap(fila_prio, PAI(k), tipo);
+        }
     }
 }
 
@@ -82,4 +89,34 @@ void desce_no_heap(FilaPrioridade* fila_prio, int k) {
             desce_no_heap(fila_prio, maior_filho);
         }
     }
+}
+
+Item extrai_maximo(FilaPrioridade* fila_prio) {
+    int j, max = 0;
+
+    for (j = 1; j < fila_prio->n; j++) {
+        if (fila_prio->vetor[max].chave < fila_prio->vetor[j].chave) {
+            max = j;
+        }    
+    }
+    troca(&(fila_prio->vetor[max]), &(fila_prio->vetor[fila_prio->n-1]));
+    
+    fila_prio->n--;
+
+    return fila_prio->vetor[fila_prio->n];
+}
+
+Item extrai_minimo(FilaPrioridade* fila_prio) {
+    int j, min = 0;
+
+    for (j = 1; j < fila_prio->n; j++) {
+        if (fila_prio->vetor[min].chave > fila_prio->vetor[j].chave) {
+            min = j;
+        }    
+    }
+    troca(&(fila_prio->vetor[min]), &(fila_prio->vetor[fila_prio->n-1]));
+    
+    fila_prio->n--;
+
+    return fila_prio->vetor[fila_prio->n];
 }
