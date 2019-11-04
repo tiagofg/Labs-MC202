@@ -26,12 +26,14 @@ Item* criar_item(char* identificador);
 
 FilaPrioridade* criar_fila_prio(int tam);
 
+void destruir_fila_prio(FilaPrioridade* fila_prio);
+
 void inserir(FilaPrioridade* fila_prio, Item item, int tipo);
 
 void sobe_no_heap(FilaPrioridade* fila_prio, int k, int tipo);
 
-void desce_no_heap(FilaPrioridade* fila_prio, int k);
+void desce_no_max_heap(FilaPrioridade* fila_prio, int k);
 
-Item extrai_maximo(FilaPrioridade* fila_prio);
+void desce_no_min_heap(FilaPrioridade* fila_prio, int k);
 
-Item extrai_minimo(FilaPrioridade* fila_prio);
+Item extrai_raiz(FilaPrioridade* fila_prio, int tipo);

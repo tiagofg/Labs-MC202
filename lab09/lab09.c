@@ -1,79 +1,83 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "heap.h"
+
+void imprimir_mediana(int i, FilaPrioridade* max_heap, FilaPrioridade* min_heap) {
+   if (max_heap->n == min_heap->n) { //imprimir duas caixas do meio
+      printf("%d %s %s\n", i + 1, max_heap->vetor[0].identificador, min_heap->vetor[0].identificador);
+   } else if (max_heap->n > min_heap->n) { //imprimir caixa do meio
+      printf("%d %s\n", i + 1, max_heap->vetor[0].identificador);
+   } else if (min_heap->n > max_heap->n) { //imprimir duas caixas do meio
+      printf("%d %s\n", i + 1, min_heap->vetor[0].identificador);
+   }
+}   
 
 int main()
 {
    int n, m;
    Item *item;
-   char *identificador = malloc(5 * sizeof(char));
-   FilaPrioridade *heap_max;
-   FilaPrioridade *heap_min;
+   char *identificador = calloc(5, sizeof(char));
+   FilaPrioridade *max_heap;
+   FilaPrioridade *min_heap;
 
    scanf("%d", &n);
 
    for (int i = 0; i < n; ++i) {
       scanf("%d", &m);
-      heap_max = criar_fila_prio(m);
-      heap_min = criar_fila_prio(m);
+      //criar heaps mínimos e máximos
+      max_heap = criar_fila_prio(m);
+      min_heap = criar_fila_prio(m);
 
       for (int j = 0; j < m; j++) {
          scanf("%s\n", identificador);
          item = criar_item(identificador);
 
-         //extrair minimo do heap max e maximo do heap minimo
-
-         if (heap_max->n == 0) {
-            printf("Inserir no heap_max 0 \n");      
-            inserir(heap_max, *item, MAX);
-         } else if (heap_min->n == 0) {
-            printf("Inserir no heap_min 0 \n"); 
-            inserir(heap_min, *item, MIN);
-         } else if (heap_max->n == heap_min->n &&
-               heap_min->vetor[0].chave > item->chave) {
-            printf("Inserir no heap_max 1 \n");      
-            inserir(heap_max, *item, MAX);
-         } else if (heap_max->n == heap_min->n &&
-               heap_max->vetor[0].chave > item->chave) {
-            printf("Inserir no heap_min 1 \n");       
-            inserir(heap_min, *item, MIN);
-         } else if (heap_max->n > heap_min->n &&
-               heap_min->vetor[0].chave > item->chave) {
-            printf("Inserir no heap_min 2 \n"); 
-            inserir(heap_min, *item, MIN);
-         } else if (heap_max->n < heap_min->n &&
-               heap_max->vetor[0].chave > item->chave) {
-            printf("Inserir no heap_max 2 \n");       
-            inserir(heap_max, *item, MAX);
-         }  else if (heap_max->n > heap_min->n &&
-               heap_min->vetor[0].chave < item->chave) {
-            printf("Inserir no heap_min 3 \n"); 
-            inserir(heap_min, *item, MIN);
-         } else if (heap_max->n < heap_min->n &&
-               heap_max->vetor[0].chave < item->chave) {
-            printf("Inserir no heap_max 3 \n");       
-            inserir(heap_max, *item, MAX);
-         } else {
-            printf("Não inseriu \n");
+         if (max_heap->n == 0) {
+            //adicionar no início do max-heap
+            inserir(max_heap, *item, MAX);
+         } else if (min_heap->n == 0) {
+            if (item->chave > max_heap->vetor[0].chave) {
+               //adicionar no início do min-heap
+               inserir(min_heap, *item, MIN);
+            } else {
+               //remover do max-heap e adicionar no início do min-heap
+               inserir(min_heap, extrai_raiz(max_heap, MAX), MIN);
+               inserir(max_heap, *item, MAX);  
+            }
+         } else if (max_heap->n <= min_heap->n &&
+               min_heap->vetor[0].chave > item->chave) {
+            inserir(max_heap, *item, MAX);
+         } else if (max_heap->n >= min_heap->n &&
+               max_heap->vetor[0].chave < item->chave) {
+            inserir(min_heap, *item, MIN);
+         } else if (max_heap->n > min_heap->n &&
+               max_heap->vetor[0].chave > item->chave) {
+            //remover raiz do max-heap e adicionar o item      
+            inserir(min_heap, extrai_raiz(max_heap, MAX), MIN);
+            inserir(max_heap, *item, MAX);
+         } else if (max_heap->n < min_heap->n &&
+               min_heap->vetor[0].chave < item->chave) {
+            //remover raiz do min-heap e adicionar o item 
+            inserir(max_heap, extrai_raiz(min_heap, MIN), MAX);
+            inserir(min_heap, *item, MIN);
+         }  else {
+            inserir(max_heap, *item, MAX);
          }
 
-         // if (j % 5 == 0 || j == m - 1) {
-         //    if (heap_max->n == heap_min->n){
-         //       printf("%d %s %s\n", i + 1, heap_max->vetor[0].identificador, heap_min->vetor[0].identificador);
-         //    } else if (heap_max->n % 2 != 0) {
-         //       printf("%d %s\n", i + 1, heap_max->vetor[0].identificador);
-         //    } else if (heap_min->n % 2 != 0) {
-         //       printf("%d %s\n", i + 1, heap_min->vetor[0].identificador);
-         //    }
-         // }
+         if (((j + 1) % 5 == 0 || (j + 1) == m)) {
+            imprimir_mediana(i, max_heap, min_heap);
+         }
+
+         free(item);
       }
 
-      printf("%s %s\n", heap_max->vetor[0].identificador, heap_min->vetor[0].identificador);
-
-      free(heap_max);
-      free(heap_min);
+      destruir_fila_prio(max_heap);
+      destruir_fila_prio(min_heap);
    }
+
+   free(identificador);
 
    return EXIT_SUCCESS;
 }
