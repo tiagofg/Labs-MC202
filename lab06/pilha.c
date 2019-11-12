@@ -53,10 +53,10 @@ void inserir_lista_na_pilha(Pilha* pilha, Lista* lista) {
 
         aux_lista = aux_lista->proximo;
     }
-    
+
 }
 
-void find_maior_valor(Pilha* pilha, Lista* lista, int n) {  
+void find_maior_valor(Pilha* pilha, Lista* lista, int n) {
     No_lista* no_remocao = malloc(sizeof(No_lista));
     No_lista* no_aux;
     long long int maior_valor;
@@ -87,7 +87,7 @@ void find_maior_valor(Pilha* pilha, Lista* lista, int n) {
             no_aux->no_removido = 0;
             no_aux = no_aux->proximo;
         }
-        
+
         remover_no(lista, no_remocao);
     }
 
@@ -108,7 +108,7 @@ long long int get_valor_sequencia(Pilha* pilha, char* sequencia) {
         sequencia[tamanho_sequencia] = desempilhar(pilha);
         // sequencia[tamanho_sequencia + 1] = '\0';
         aux = pilha->topo;
-    }    
+    }
 
     return atoll(sequencia);
 }
