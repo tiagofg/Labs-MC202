@@ -17,10 +17,10 @@ int get_qtde_ocorrencias(char* padrao, char* texto) {
     return qtde_ocorrencias;
 }
 
-No find_padrao(Hash* hash, char* chave) {
+No find_padrao(Hash* hash, char* chave, int n) {
     No no;
 
-    for (int i = 0; i < MAX; i++) {
+    for (int i = 0; i < n; i++) {
         if (strcmp(hash->vetor[i].chave, chave) == 0) {
             no = hash->vetor[i];
         }
@@ -35,7 +35,7 @@ int main()
 
     scanf("%d", &n);
 
-    Hash* hash = criar_hash();
+    Hash* hash = criar_hash(n);
 
     char* padrao = malloc(100 * sizeof(char));
     char* texto = malloc(40000 * sizeof(char));
@@ -48,13 +48,13 @@ int main()
     for (int i = 0; i < n; i++) {
         scanf("%s\n", padrao);
         strcpy(padroes[i], padrao);
-        inserir(hash, padrao, 0);
+        inserir(hash, padrao, 0, n);
     }
 
     scanf("%s\n", texto);
 
     for (int i = 0; i < n; i++) {
-        No no = find_padrao(hash, padroes[i]);
+        No no = find_padrao(hash, padroes[i], n);
         no.num_ocorrencias = get_qtde_ocorrencias(no.chave, texto);
 
         printf("%d\n", no.num_ocorrencias);
