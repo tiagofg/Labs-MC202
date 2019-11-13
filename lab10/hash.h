@@ -5,17 +5,21 @@
 
 #endif
 
+#define MAX 100
+
 typedef struct {
     char chave[100];
     int num_ocorrencias;
 } No;
 
 typedef struct {
-    No* vetor;
+    No vetor[MAX];
 } Hash;
 
-Hash* criar_hash(int n);
+Hash* criar_hash();
 
-int gerar_hash(char *chave, int num);
+int gerar_hash(char *chave);
 
-void inserir(Hash* hash, char *chave, int num_ocorrencias, int n);
+void inserir(Hash* hash, char *chave, int num_ocorrencias);
+
+No find_padrao(Hash* hash, char* chave);
