@@ -4,7 +4,7 @@
 
 #include "hash.h"
 
-Hash* criar_hash(int n) { //criando hash e inicializando as chaves
+Hash* criar_hash(int n) { //criando hash e inicializando o vetor e as chaves
     Hash* hash = malloc(sizeof(Hash));
 
     hash->vetor = malloc(n * sizeof(No));
@@ -65,7 +65,7 @@ void inserir(Hash* hash, char *chave, int n, int ordem) {
 No find_padrao(Hash* hash, int ordem, int n) {
     No no;
 
-    //achando no que contém o padrão dentro do hash
+    //achando nó de acordo com o índice
     for (int i = 0; i < n; i++) {
         if (hash->vetor[i].ordem == ordem) {
             no = hash->vetor[i];

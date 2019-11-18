@@ -5,21 +5,21 @@
 #include "hash.h"
 
 int get_qtde_ocorrencias(char* padrao, char* texto) {
-    int qtde_ocorrencias = 0;
+    int tamanho_texto = strlen(texto);
     int tamanho_padrao = strlen(padrao);
-    char* sub_str = malloc(tamanho_padrao + 1 * sizeof(char));
+    int i, j, qtde_ocorrencias = 0;
 
-    //pegando a quantidade de ocorrencias de uma chave em um texto
-    for (int i = 0; i < strlen(texto); i++) {
-        strncpy(sub_str, texto + i, tamanho_padrao);
+    for (i = 0; i <= tamanho_texto - tamanho_padrao; i++) {
+        //se os caracteres do texto e do padrão forem iguais, continua o loop
+        for (j = 0; j < tamanho_padrao && texto[i + j] == padrao[j]; j++) {
+            continue;
+        }
 
-        //verificando se a substring é igual o padrão
-        if (strcmp(sub_str, padrao) == 0) {
+        //se a quantidade de caracteres for igual o tamanho do padrão, então a quantidade de ocorrências aumenta
+        if (j == tamanho_padrao) {
             qtde_ocorrencias++;
         }
     }
-
-    free(sub_str);
 
     return qtde_ocorrencias;
 }
