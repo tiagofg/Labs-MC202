@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "lista.h"
 
 Lista* criar_lista() {
@@ -6,10 +9,8 @@ Lista* criar_lista() {
     No* no = malloc(sizeof(No)); //alocando memória do nó
 
     //inicializando nó
-    no->x = 0;
-    no->y = 0;
-    no->w = 0;
-    no->z = 0;
+    no->valor = 0;
+    no->peso = 0;
     no->proximo = NULL;
 
     //setando ínicio da lista
@@ -26,11 +27,16 @@ void destruir_lista(No* no) {
     }
 }
 
-No* inserir(Lista* lista, int valor) {
+Lista* inserir(Lista* lista, int valor) {
+    No* no = lista->inicio;
+
     No* novo = malloc(sizeof(No));
-    novo->v = v;
-    novo->prox = lista;
-    return novo;
+    novo->valor = valor;
+    novo->proximo = no;
+
+    lista->inicio = no;
+
+    return lista;
 }
 
 No* obter_iterador(Lista* lista) {

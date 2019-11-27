@@ -18,7 +18,7 @@ Lista* criar_lista();
 
 void destruir_lista(No* no);
 
-No* inserir(Lista* lista, int valor);
+Lista* inserir(Lista* lista, int valor);
 
 No* obter_iterador(Lista* lista);
 

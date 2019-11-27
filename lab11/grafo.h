@@ -15,4 +15,4 @@ void destroi_grafo(Grafo* grafo);
 
 void insere_aresta(Grafo* grafo, int u, int v);
 
-Lista* obter_adjacencia(int num_vertice);
+Lista* obter_adjacencia(Grafo* grafo, int num_vertice);
