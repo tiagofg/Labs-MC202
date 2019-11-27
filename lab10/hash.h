@@ -1,25 +1,22 @@
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
-
-
-
 #endif
-
-#define MAX 100
 
 typedef struct {
     char chave[100];
-    int num_ocorrencias;
+    int ordem;
 } No;
 
 typedef struct {
-    No vetor[MAX];
+    No* vetor;
 } Hash;
 
-Hash* criar_hash();
+Hash* criar_hash(int n);
 
-int gerar_hash(char *chave);
+void destruir_hash(Hash* hash);
 
-void inserir(Hash* hash, char *chave, int num_ocorrencias);
+int gerar_hash(char *chave, int num);
 
-No find_padrao(Hash* hash, char* chave);
+void inserir(Hash* hash, char *chave, int n, int ordem);
+
+No find_padrao(Hash* hash, int ordem, int n);
