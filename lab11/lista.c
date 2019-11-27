@@ -14,6 +14,37 @@ Lista* criar_lista() {
 
     //setando ínicio da lista
     lista->inicio = no;
+    lista->tamanho = 0;
 
     return lista;
+}
+
+void destruir_lista(No* no) {
+    while (no != NULL) {
+        destruir_lista(no->proximo);
+        free(no);
+    }
+}
+
+No* inserir(Lista* lista, int valor) {
+    No* novo = malloc(sizeof(No));
+    novo->v = v;
+    novo->prox = lista;
+    return novo;
+}
+
+No* obter_iterador(Lista* lista) {
+    return lista->inicio;
+}
+
+No* avancar_posicao(No* iterador) {
+    return iterador->proximo;
+}
+
+int eh_vazia(Lista* lista) {
+    if (lista->tamanho == 0) {
+        return 1;
+    }
+
+    return 0;
 }

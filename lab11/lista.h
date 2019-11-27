@@ -3,21 +3,25 @@
 #endif // LISTA_H
 
 typedef struct No {
-    int x, y, w, z;
+    int valor;
+    int peso;
 
     struct No* proximo;
 } No;
 
 typedef struct {
     No* inicio;
+    int tamanho;
 } Lista;
 
 Lista* criar_lista();
 
-void inserir(Lista* lista, No* no);
+void destruir_lista(No* no);
 
-int obter_iterador(Lista* lista);
+No* inserir(Lista* lista, int valor);
 
-void avancar_posicao(int iterador);
+No* obter_iterador(Lista* lista);
+
+No* avancar_posicao(No* iterador);
 
 int eh_vazia(Lista* lista);
