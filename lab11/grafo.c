@@ -7,25 +7,37 @@ Grafo* criar_grafo(int num_vertices) {
     Grafo* grafo = malloc(sizeof(Grafo));
 
     grafo->num_vertices = num_vertices;
-    grafo->adjacencia_vertices = malloc(num_vertices * sizeof(Lista));
+    grafo->vertices = (Lista**) malloc(num_vertices * sizeof(Lista*));
 
     for (int i = 0; i < num_vertices; i++) {
-        grafo->adjacencia_vertices[i] = criar_lista();
+        grafo->vertices[i] = criar_lista();
     }
 
     return grafo;
 }
 
 void destroi_grafo(Grafo* grafo) {
-    for (int i = 0; i < num_vertices; i++) {
-        destruir_lista(obter_iterador(grafo->adjacencia_vertices[i]));
+    for (int i = 0; i < grafo->num_vertices; i++) {
+        destruir_lista(grafo->vertices[i]->inicio);
+        free(grafo->vertices[i]);
     }
 
     free(grafo);
 }
 
-void insere_aresta(Grafo* grafo, int u, int v);
+void insere_aresta(Grafo* grafo, int origem, int destino, int variacao, char elevador) {
+    Lista* adjacencia = grafo->vertices[origem];
+    No* no_origem = adjacencia->inicio;
+
+    if (no_origem->elevador == elevador) {
+        // printf("Inserir %d na lista de adjacencia de %d com peso 1 \n", destino, origem);
+        inserir(adjacencia, destino, 1, variacao, elevador);
+    } else {
+        // printf("Inserir %d na lista de adjacencia de %d com peso 2 \n", destino, origem);
+        inserir(adjacencia, destino, 2, variacao, elevador);
+    }
+}
 
 Lista* obter_adjacencia(Grafo* grafo, int num_vertice) {
-    return grafo->adjacencia_vertices[num_vertice];
+    return grafo->vertices[num_vertice];
 }

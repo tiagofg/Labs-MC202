@@ -6,35 +6,46 @@
 Lista* criar_lista() {
     Lista* lista = malloc(sizeof(Lista)); //alocando memória da lista
 
-    No* no = malloc(sizeof(No)); //alocando memória do nó
-
-    //inicializando nó
-    no->valor = 0;
-    no->peso = 0;
-    no->proximo = NULL;
-
     //setando ínicio da lista
-    lista->inicio = no;
-    lista->tamanho = 0;
+    lista->inicio = NULL;
 
     return lista;
 }
 
-void destruir_lista(No* no) {
-    while (no != NULL) {
-        destruir_lista(no->proximo);
-        free(no);
+void destruir_lista(No* inicio) {
+    if (inicio != NULL) {
+        destruir_lista(inicio->proximo);
+        free(inicio);
     }
 }
 
-Lista* inserir(Lista* lista, int valor) {
-    No* no = lista->inicio;
+Lista* inserir(Lista* lista, int numero, int peso, int variacao, char elevador) {
+    if (lista->inicio != NULL) {
+        No* no = lista->inicio;
 
-    No* novo = malloc(sizeof(No));
-    novo->valor = valor;
-    novo->proximo = no;
+        while (no->proximo != NULL) {
+            no = no->proximo;    
+        }
 
-    lista->inicio = no;
+        No* novo = malloc(sizeof(No));
+
+        novo->numero = numero;
+        novo->peso = peso;
+        novo->variacao = variacao;
+        novo->elevador = elevador;
+
+        no->proximo = novo;
+    } else {
+        No* novo = malloc(sizeof(No));
+
+        novo->numero = numero;
+        novo->peso = peso;
+        novo->variacao = variacao;
+        novo->elevador = elevador;
+        novo->proximo = NULL;
+
+        lista->inicio = novo;
+    }
 
     return lista;
 }
@@ -47,10 +58,23 @@ No* avancar_posicao(No* iterador) {
     return iterador->proximo;
 }
 
-int eh_vazia(Lista* lista) {
-    if (lista->tamanho == 0) {
-        return 1;
+void imprimir_lista(Lista* lista) {
+    No* no = lista->inicio;
+
+    while (no->proximo != NULL) {
+        printf("%d ", no->variacao);
+        no = no->proximo;
     }
 
-    return 0;
+    printf("%d ", no->variacao);
+    
+    printf("\n");
 }
+
+// int eh_vazia(Lista* lista) {
+//     if (lista->tamanho == 0) {
+//         return 1;
+//     }
+
+//     return 0;
+// }
