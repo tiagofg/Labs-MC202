@@ -38,7 +38,7 @@ int main()
             //adicionar no início do max-heap
             inserir(max_heap, *item, MAX);
          } else if (min_heap->n == 0) {
-            if (item->chave > max_heap->vetor[0].chave) {
+            if (strcmp(item->identificador, max_heap->vetor[0].identificador) > 0) {
                //adicionar no início do min-heap
                inserir(min_heap, *item, MIN);
             } else {
@@ -47,18 +47,18 @@ int main()
                inserir(max_heap, *item, MAX);  
             }
          } else if (max_heap->n <= min_heap->n &&
-               min_heap->vetor[0].chave > item->chave) {
+               strcmp(min_heap->vetor[0].identificador, item->identificador) > 0) {
             inserir(max_heap, *item, MAX);
          } else if (max_heap->n >= min_heap->n &&
-               max_heap->vetor[0].chave < item->chave) {
+               strcmp(max_heap->vetor[0].identificador, item->identificador) < 0) {
             inserir(min_heap, *item, MIN);
          } else if (max_heap->n > min_heap->n &&
-               max_heap->vetor[0].chave > item->chave) {
+               strcmp(max_heap->vetor[0].identificador, item->identificador) > 0) {
             //remover raiz do max-heap e adicionar o item      
             inserir(min_heap, extrai_raiz(max_heap, MAX), MIN);
             inserir(max_heap, *item, MAX);
          } else if (max_heap->n < min_heap->n &&
-               min_heap->vetor[0].chave < item->chave) {
+               strcmp(min_heap->vetor[0].identificador, item->identificador) < 0) {
             //remover raiz do min-heap e adicionar o item 
             inserir(max_heap, extrai_raiz(min_heap, MIN), MAX);
             inserir(min_heap, *item, MIN);
