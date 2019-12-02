@@ -10,7 +10,6 @@
 
 typedef struct {
     char* identificador;
-    int chave;
 } Item;
 
 typedef struct {
@@ -19,8 +18,6 @@ typedef struct {
 } FilaPrioridade;
 
 void troca(Item *a, Item *b);
-
-int gerar_chave(char* identificador);
 
 Item* criar_item(char* identificador);
 
