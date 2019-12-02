@@ -12,10 +12,13 @@ Lista* criar_lista() {
     return lista;
 }
 
-void destruir_lista(No* inicio) {
-    if (inicio != NULL) {
-        destruir_lista(inicio->proximo);
-        free(inicio);
+void destruir_lista(Lista* lista) {
+    No* no = lista->inicio;
+
+    if (no->proximo != NULL) {
+        No* aux = no;
+        no = no->proximo;
+        free(aux);
     }
 }
 
@@ -55,26 +58,58 @@ No* obter_iterador(Lista* lista) {
 }
 
 No* avancar_posicao(No* iterador) {
-    return iterador->proximo;
+    if (iterador != NULL) {
+        return iterador->proximo;
+    }
+
+    return NULL;
 }
 
 void imprimir_lista(Lista* lista) {
     No* no = lista->inicio;
 
     while (no->proximo != NULL) {
-        printf("%d ", no->variacao);
+        printf("%d ", no->numero);
         no = no->proximo;
     }
 
-    printf("%d ", no->variacao);
+    printf("%d ", no->numero);
     
     printf("\n");
 }
 
-// int eh_vazia(Lista* lista) {
-//     if (lista->tamanho == 0) {
-//         return 1;
-//     }
+int esta_na_lista(Lista* lista, int vertice) {
+    if (lista->inicio == NULL) {
+        return 0;
+    }
 
-//     return 0;
-// }
+    No* no = lista->inicio;
+
+    while (no != NULL) {
+        if (no->numero == vertice) {
+            return 1;
+        }
+
+        no = no->proximo;
+    }
+
+    return 0;
+}
+
+int get_variacao(Lista* lista, int vertice) {
+    if (lista->inicio == NULL) {
+        return 0;
+    }
+
+    No* no = lista->inicio;
+
+    while (no != NULL) {
+        if (no->numero == vertice) {
+            return no->variacao;
+        }
+
+        no = no->proximo;
+    }
+
+    return 0;
+}

@@ -13,6 +13,6 @@ Grafo* criar_grafo(int num_vertices);
 
 void destroi_grafo(Grafo* grafo);
 
-void insere_aresta(Grafo* grafo, int origem, int destino, int variacao, char elevador);
+void insere_aresta(Grafo* grafo, int origem, int destino, int variacao, char elevador_destino, char* elevadores);
 
 Lista* obter_adjacencia(Grafo* grafo, int num_vertice);

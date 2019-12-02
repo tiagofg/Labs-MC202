@@ -18,23 +18,22 @@ Grafo* criar_grafo(int num_vertices) {
 
 void destroi_grafo(Grafo* grafo) {
     for (int i = 0; i < grafo->num_vertices; i++) {
-        destruir_lista(grafo->vertices[i]->inicio);
+        destruir_lista(grafo->vertices[i]);
         free(grafo->vertices[i]);
     }
 
     free(grafo);
 }
 
-void insere_aresta(Grafo* grafo, int origem, int destino, int variacao, char elevador) {
+void insere_aresta(Grafo* grafo, int origem, int destino, int variacao, char elevador_destino, char* elevadores) {
     Lista* adjacencia = grafo->vertices[origem];
-    No* no_origem = adjacencia->inicio;
 
-    if (no_origem->elevador == elevador) {
+    if (elevadores[origem] == elevador_destino) {
         // printf("Inserir %d na lista de adjacencia de %d com peso 1 \n", destino, origem);
-        inserir(adjacencia, destino, 1, variacao, elevador);
+        inserir(adjacencia, destino, 1, variacao, elevador_destino);
     } else {
         // printf("Inserir %d na lista de adjacencia de %d com peso 2 \n", destino, origem);
-        inserir(adjacencia, destino, 2, variacao, elevador);
+        inserir(adjacencia, destino, 2, variacao, elevador_destino);
     }
 }
 

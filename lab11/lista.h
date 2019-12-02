@@ -17,7 +17,7 @@ typedef struct {
 
 Lista* criar_lista();
 
-void destruir_lista(No* inicio);
+void destruir_lista(Lista* lista);
 
 Lista* inserir(Lista* lista, int numero, int peso, int variacao, char elevador);
 
@@ -27,4 +27,6 @@ No* avancar_posicao(No* iterador);
 
 void imprimir_lista(Lista* lista);
 
-// int eh_vazia(Lista* lista);
+int esta_na_lista(Lista* lista, int vertice);
+
+int get_variacao(Lista* lista, int vertice);
