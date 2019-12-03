@@ -32,3 +32,9 @@ void sobe_no_heap(FilaPrioridade* fila_prio, int k, int tipo);
 void desce_no_heap(FilaPrioridade* fila_prio, int k, int tipo);
 
 Item extrai_raiz(FilaPrioridade* fila_prio, int tipo);
+
+int obter_tamanho_atual(FilaPrioridade* fila_prio);
+
+Item obter_raiz(FilaPrioridade* fila_prio);
+
+char* obter_identificador(Item item);

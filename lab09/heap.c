@@ -14,7 +14,18 @@ void troca(Item *a, Item *b) { //trocar itens
 Item* criar_item(char* identificador) { //criar novo item
     Item* item = calloc(1, sizeof(Item));
 
+    if (item == NULL) {
+        printf("Não foi possível alocar item \n");
+        exit(1);
+    }
+
     item->identificador = calloc(5, sizeof(char));
+
+    if (item->identificador == NULL) {
+        printf("Não foi possível alocar identificador \n");
+        exit(1);
+    }
+
     strcpy(item->identificador, identificador);
 
     return item;
@@ -23,7 +34,18 @@ Item* criar_item(char* identificador) { //criar novo item
 FilaPrioridade* criar_fila_prio(int tam) { //criar fila de prioridade
     FilaPrioridade* fila_prio = calloc(1, sizeof(FilaPrioridade));
 
+    if (fila_prio == NULL) {
+        printf("Não foi possível alocar fila de prioridade \n");
+        exit(1);
+    }
+
     fila_prio->vetor = calloc(tam, sizeof(Item));
+
+    if (fila_prio->vetor == NULL) {
+        printf("Não foi possível alocar vetor de heap \n");
+        exit(1);
+    }
+
     fila_prio->n = 0;
     fila_prio->tamanho = tam;
 
@@ -63,7 +85,7 @@ void sobe_no_heap(FilaPrioridade* fila_prio, int k, int tipo) {
 }
 
 void desce_no_heap(FilaPrioridade* fila_prio, int k, int tipo) {
-    //colocar item no final do max-heap para remover
+    //colocar item no final do heap para remover
 
     if (F_ESQ(k) < fila_prio->n) {
         if (tipo == MAX) {
@@ -78,7 +100,7 @@ void desce_no_heap(FilaPrioridade* fila_prio, int k, int tipo) {
                 desce_no_heap(fila_prio, maior_filho, MAX);
             }
         } else if (tipo == MIN) {
-                int menor_filho = F_ESQ(k);
+            int menor_filho = F_ESQ(k);
 
             if (F_DIR(k) < fila_prio->n && strcmp(fila_prio->vetor[F_ESQ(k)].identificador, fila_prio->vetor[F_DIR(k)].identificador) > 0) {
                 menor_filho = F_DIR(k);
@@ -106,4 +128,16 @@ Item extrai_raiz(FilaPrioridade* fila_prio, int tipo) {
     } 
 
     return item;
+}
+
+int obter_tamanho_atual(FilaPrioridade* fila_prio) {
+    return fila_prio->n;
+}
+
+Item obter_raiz(FilaPrioridade* fila_prio) {
+    return fila_prio->vetor[0];
+}
+
+char* obter_identificador(Item item) {
+    return item.identificador;
 }
