@@ -62,38 +62,32 @@ void sobe_no_heap(FilaPrioridade* fila_prio, int k, int tipo) {
     }
 }
 
-void desce_no_max_heap(FilaPrioridade* fila_prio, int k) {
+void desce_no_heap(FilaPrioridade* fila_prio, int k, int tipo) {
     //colocar item no final do max-heap para remover
-    int maior_filho;
 
     if (F_ESQ(k) < fila_prio->n) {
-        maior_filho = F_ESQ(k);
+        if (tipo == MAX) {
+            int maior_filho = F_ESQ(k);
 
-        if (F_DIR(k) < fila_prio->n && strcmp(fila_prio->vetor[F_ESQ(k)].identificador, fila_prio->vetor[F_DIR(k)].identificador) < 0) {
-            maior_filho = F_DIR(k);
-        }
+            if (F_DIR(k) < fila_prio->n && strcmp(fila_prio->vetor[F_ESQ(k)].identificador, fila_prio->vetor[F_DIR(k)].identificador) < 0) {
+                maior_filho = F_DIR(k);
+            }
 
-        if (strcmp(fila_prio->vetor[k].identificador, fila_prio->vetor[maior_filho].identificador) < 0) {
-            troca(&fila_prio->vetor[k], &fila_prio->vetor[maior_filho]);
-            desce_no_max_heap(fila_prio, maior_filho);
-        }
-    }
-}
+            if (strcmp(fila_prio->vetor[k].identificador, fila_prio->vetor[maior_filho].identificador) < 0) {
+                troca(&fila_prio->vetor[k], &fila_prio->vetor[maior_filho]);
+                desce_no_heap(fila_prio, maior_filho, MAX);
+            }
+        } else if (tipo == MIN) {
+                int menor_filho = F_ESQ(k);
 
-void desce_no_min_heap(FilaPrioridade* fila_prio, int k) {
-    //colocar item no final do min-heap para remover
-    int menor_filho;
+            if (F_DIR(k) < fila_prio->n && strcmp(fila_prio->vetor[F_ESQ(k)].identificador, fila_prio->vetor[F_DIR(k)].identificador) > 0) {
+                menor_filho = F_DIR(k);
+            }
 
-    if (F_ESQ(k) < fila_prio->n) {
-        menor_filho = F_ESQ(k);
-
-        if (F_DIR(k) < fila_prio->n && strcmp(fila_prio->vetor[F_ESQ(k)].identificador, fila_prio->vetor[F_DIR(k)].identificador) > 0) {
-            menor_filho = F_DIR(k);
-        }
-
-        if (strcmp(fila_prio->vetor[k].identificador, fila_prio->vetor[menor_filho].identificador) > 0) {
-            troca(&fila_prio->vetor[k], &fila_prio->vetor[menor_filho]);
-            desce_no_min_heap(fila_prio, menor_filho);
+            if (strcmp(fila_prio->vetor[k].identificador, fila_prio->vetor[menor_filho].identificador) > 0) {
+                troca(&fila_prio->vetor[k], &fila_prio->vetor[menor_filho]);
+                desce_no_heap(fila_prio, menor_filho, MIN);
+            }
         }
     }
 }
@@ -106,9 +100,9 @@ Item extrai_raiz(FilaPrioridade* fila_prio, int tipo) {
     fila_prio->n--;
     
     if (tipo == MAX) {
-        desce_no_max_heap(fila_prio, 0);
+        desce_no_heap(fila_prio, 0, MAX);
     } else if (tipo == MIN) {
-        desce_no_min_heap(fila_prio, 0);
+        desce_no_heap(fila_prio, 0, MIN);
     } 
 
     return item;

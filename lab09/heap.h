@@ -29,8 +29,6 @@ void inserir(FilaPrioridade* fila_prio, Item item, int tipo);
 
 void sobe_no_heap(FilaPrioridade* fila_prio, int k, int tipo);
 
-void desce_no_max_heap(FilaPrioridade* fila_prio, int k);
-
-void desce_no_min_heap(FilaPrioridade* fila_prio, int k);
+void desce_no_heap(FilaPrioridade* fila_prio, int k, int tipo);
 
 Item extrai_raiz(FilaPrioridade* fila_prio, int tipo);
