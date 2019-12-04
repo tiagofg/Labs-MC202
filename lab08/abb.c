@@ -6,12 +6,18 @@
 
 ArvoreBusca* criar_arvore() { //inicializando árvore
     ArvoreBusca* arvore = malloc(sizeof(ArvoreBusca));
+
+    if (arvore == NULL) {
+        printf("Falha ao alocar arvore \n");
+        exit(1);
+    }
+
     arvore->raiz = NULL;
 
     return arvore;
 }
 
-void destruir_arvore(ArvoreBusca* arvore, int qtde_dados) { //destruindo árvore
+void destruir_arvore(ArvoreBusca* arvore) { //destruindo árvore
     remover_todos_os_nos(arvore, arvore->raiz);
     free(arvore);
 }
@@ -22,9 +28,22 @@ No* inserir(ArvoreBusca* arvore, No* raiz, int identificador, char* dado) {
 
     if (raiz == NULL) { //inserir no caso do nó atual ser nulo
         novo = malloc(sizeof(No));
+
+        if (novo == NULL) {
+            printf("Falha ao alocar novo nó \n");
+            exit(1);
+        }
+
         novo->esquerdo = novo->direito = NULL;
         novo->identificador = identificador;
-        novo->dado = malloc(9 * sizeof(char));
+
+        novo->dado = malloc(TAM_DADO * sizeof(char));
+
+        if (novo == NULL) {
+            printf("Falha ao alocar dado do novo nó \n");
+            exit(1);
+        }
+
         strcpy(novo->dado, dado);
 
         if (arvore->raiz == NULL) {
@@ -59,28 +78,16 @@ void remover_todos_os_nos(ArvoreBusca* arvore, No* raiz) {
     }
 }
 
-No* buscar(No* raiz, int identificador) {
-    if (raiz == NULL || identificador == raiz->identificador) {
-        return raiz;
-    }
-
-    //verificando onde o nó deve ser buscado
-    if (identificador < raiz->identificador) {
-        return buscar(raiz->esquerdo, identificador);
-    } else {
-        return buscar(raiz->direito, identificador);
+void inordem(No* raiz) {
+    if (raiz != NULL) {
+        //imprimindo dados em inordem
+        inordem(raiz->esquerdo);
+        printf("%s", raiz->dado);
+        inordem(raiz->direito);
     }
 }
 
-void imprimir_mensagem(ArvoreBusca* arvore, int qtde_dados) {
-    No* buscado;
-    char* mensagem = calloc(8 * qtde_dados + 1, sizeof(char)); //alocando memória para os bits e o /0
-
-    for (int i = 1; i <= qtde_dados; i++) {
-        buscado = buscar(arvore->raiz, i); //buscando nó pelo identificador
-        strcat(mensagem, buscado->dado); //concatenando string de mensagem
-    }
-
-    printf("%s\n", mensagem); //imprimindo mensagem decodificada
-    free(mensagem);
+void imprimir_mensagem(ArvoreBusca* arvore) {
+    inordem(arvore->raiz);
+    printf("\n"); //linha vazia ao final da mensagem
 }

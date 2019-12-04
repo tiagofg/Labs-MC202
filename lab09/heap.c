@@ -10,7 +10,6 @@ void troca(Item *a, Item *b) { //trocar itens
     *b = t;
 }
 
-
 Item* criar_item(char* identificador) { //criar novo item
     Item* item = calloc(1, sizeof(Item));
 
