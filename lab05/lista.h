@@ -16,7 +16,9 @@ typedef struct {
     No* inicio;
 } Lista;
 
-Lista* criar_lista();
+Lista* criar_lista(int tamanho);
+
+void destruir_lista(Lista* lista);
 
 void inserir_no(Lista* lista, No* no);
 

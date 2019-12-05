@@ -39,5 +39,7 @@ int main()
 
     ler_operacoes(m, heap);
 
+    destruir_lista(heap);
+
     return EXIT_SUCCESS;
 }

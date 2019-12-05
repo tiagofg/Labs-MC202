@@ -5,9 +5,19 @@
 #include "lista.h"
 
 Lista* criar_lista(int tamanho) {
-    Lista* lista = malloc(sizeof(Lista)); //alocando memória da lista
+    Lista* lista = calloc(1, sizeof(Lista)); //alocando memória da lista
 
-    No* no = malloc(sizeof(No)); //alocando memória do nó
+    if (lista == NULL) {
+        printf("Não foi possível alocar lista");
+        exit(1);
+    }
+
+    No* no = calloc(1, sizeof(No)); //alocando memória do nó
+
+    if (no == NULL) {
+        printf("Não foi possível alocar nó");
+        exit(1);
+    }
 
     //inicializando nó
     no->inicio_segmento = 0;
@@ -19,6 +29,18 @@ Lista* criar_lista(int tamanho) {
     lista->inicio = no;
 
     return lista;
+}
+
+void destruir_lista(Lista* lista) {
+    No* no = lista->inicio;
+
+    while (no != NULL) {
+        No* aux = no;
+        no = no->proximo;
+        free(aux);
+    }
+    
+    free(lista);
 }
 
 void inserir_no(Lista* lista, No* no){
@@ -148,7 +170,7 @@ int esta_livre(Lista* heap, int endereco, int tamanho) {
 
 
 void alocar_memoria(Lista* heap, int tamanho) {
-    No* no_alocacao = malloc(sizeof(No));
+    No* no_alocacao;
     No* inicio = heap->inicio;
 
     //verificando se só existe um nó
@@ -175,7 +197,12 @@ void alocar_memoria(Lista* heap, int tamanho) {
 }
 
 void desalocar_memoria(Lista* heap, int endereco, int tamanho) {
-    No* novo_heap = malloc(sizeof(No));
+    No* novo_heap = calloc(1, sizeof(No));
+
+    if (novo_heap == NULL) {
+        printf("Não foi possível alocar novo heap");
+        exit(1);
+    }
 
     //inicializando um novo nó
     novo_heap->inicio_segmento = endereco;
@@ -201,6 +228,7 @@ void realocar_memoria(Lista* heap, int endereco, int tamanho, int novo_tamanho) 
             if (endereco + tamanho >= atual->inicio_segmento && endereco + tamanho <= atual->inicio_segmento + atual->tamanho_segmento) {
                 if (atual->tamanho_segmento - (novo_tamanho - tamanho) <= 0) {
                     remover_no(heap, atual);
+                    break;
                 } else {
                     atual->inicio_segmento = endereco + novo_tamanho;
                     atual->tamanho_segmento = atual->tamanho_segmento - (novo_tamanho - tamanho);
