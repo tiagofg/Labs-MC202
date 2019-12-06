@@ -4,22 +4,19 @@
 
 #include "hash.h"
 
-int get_qtde_ocorrencias(char* padrao, char* texto) {
-    int tamanho_texto = strlen(texto);
-    int tamanho_padrao = strlen(padrao);
-    int i, j, qtde_ocorrencias = 0;
+int get_qtde_ocorrencias(Hash* hash, int tamanho, int posicao, char* texto) {
+    int qtde_ocorrencias = 0;
+    char* substr = calloc(tamanho + 1, sizeof(char));
 
-    for (i = 0; i <= tamanho_texto - tamanho_padrao; i++) {
-        //se os caracteres do texto e do padrão forem iguais, continua o loop
-        for (j = 0; j < tamanho_padrao && texto[i + j] == padrao[j]; j++) {
-            continue;
-        }
+    for (int i = 0; i < strlen(texto) - tamanho + 1; i++) {
+        memcpy(substr, &texto[i], tamanho);
 
-        //se a quantidade de caracteres for igual o tamanho do padrão, então a quantidade de ocorrências aumenta
-        if (j == tamanho_padrao) {
+        if (esta_no_hash(hash, substr, posicao)) {
             qtde_ocorrencias++;
         }
-    }
+    }    
+
+    free(substr);
 
     return qtde_ocorrencias;
 }
@@ -33,34 +30,33 @@ int main()
     Hash* hash = criar_hash(n);
 
     //strings para ler cada padrão e o texto completo
-    char* padrao = malloc(50 * sizeof(char));
-    char* texto = malloc(40000 * sizeof(char));
+    char padrao[50];
+    char texto[40000];
 
-    //vetor de inteiros para manter a ordem de inserção dos padrões
+    //vetor de inteiros para manter a posicao de inserção dos padrões
     int* qtde_padroes = malloc(n * sizeof(int));
+    int* tamanhos = malloc(n * sizeof(int));
 
     //adicionando padrão no vetor de strings e no hash
     for (int i = 0; i < n; i++) {
         scanf("%s\n", padrao);
         qtde_padroes[i] = 0;
-        inserir(hash, padrao, n, i);
+        tamanhos[i] = strlen(padrao);
+        inserir(hash, padrao, i);
     }
 
     scanf("%s\n", texto);
 
     for (int i = 0; i < n; i++) {
-        No no = find_padrao(hash, i, n);
-        qtde_padroes[i] = get_qtde_ocorrencias(no.chave, texto);
+        qtde_padroes[i] = get_qtde_ocorrencias(hash, tamanhos[i], i, texto);
         //imprimindo número de ocorrências para cada padrão
         printf("%d\n", qtde_padroes[i]);
     }
 
     //liberando memória
-    free(hash->vetor);
-    free(hash);
-    free(padrao);
-    free(texto);
+    destruir_hash(hash);
     free(qtde_padroes);
+    free(tamanhos);
 
    return EXIT_SUCCESS;
 

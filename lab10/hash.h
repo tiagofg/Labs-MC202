@@ -3,20 +3,21 @@
 #endif
 
 typedef struct {
-    char chave[100];
-    int ordem;
+    char* chave;
+    int posicao;
 } No;
 
 typedef struct {
     No* vetor;
+    int tamanho;
 } Hash;
 
-Hash* criar_hash(int n);
+Hash* criar_hash(int tamanho);
 
 void destruir_hash(Hash* hash);
 
 int gerar_hash(char *chave, int num);
 
-void inserir(Hash* hash, char *chave, int n, int ordem);
+void inserir(Hash* hash, char *chave, int posicao);
 
-No find_padrao(Hash* hash, int ordem, int n);
+int esta_no_hash(Hash* hash, char* chave, int posicao);
