@@ -12,12 +12,12 @@ typedef struct {
     int tamanho;
 } Hash;
 
-Hash* criar_hash(int tamanho);
+Hash* criar_hash(int n);
 
 void destruir_hash(Hash* hash);
 
-int gerar_hash(char *chave, int num);
+int gerar_hash(char *chave, int tamanho);
 
 void inserir(Hash* hash, char *chave, int posicao);
 
-int esta_no_hash(Hash* hash, char* chave, int posicao);
+void esta_no_hash(Hash* hash, char* chave, int* qtde_ocorrencias);

@@ -4,21 +4,35 @@
 
 #include "hash.h"
 
-int get_qtde_ocorrencias(Hash* hash, int tamanho, int posicao, char* texto) {
-    int qtde_ocorrencias = 0;
-    char* substr = calloc(tamanho + 1, sizeof(char));
+void get_qtde_ocorrencias(Hash* hash, int* tamanhos, char* texto, int* qtde_ocorrencias, int tamanhos_diferentes) {
+    for(int i = 0; i < tamanhos_diferentes; i++) {
+        int tamanho = tamanhos[i];
 
-    for (int i = 0; i < strlen(texto) - tamanho + 1; i++) {
-        memcpy(substr, &texto[i], tamanho);
-
-        if (esta_no_hash(hash, substr, posicao)) {
-            qtde_ocorrencias++;
+        char* substr = calloc(tamanho + 1, sizeof(char));
+        if (substr == NULL) {
+            printf("Falha ao alocar string para armazenar os possíveis padrões \n");
+            exit(1);
         }
-    }    
 
-    free(substr);
+        for (int i = 0; i < strlen(texto) - tamanho + 1; i++) {
+            memcpy(substr, &texto[i], tamanho);
 
-    return qtde_ocorrencias;
+            //verificar se os padrões de um mesmo tamanho estão armazenados no hash
+            esta_no_hash(hash, substr, qtde_ocorrencias);
+        }    
+
+        free(substr);
+    }
+}
+
+int esta_inserido(int* tamanhos, int tamanho, int tamanhos_diferentes) {
+    for (int i = 0; i < tamanhos_diferentes; i++) {
+        if (tamanhos[i] == tamanho) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 int main()
@@ -30,32 +44,60 @@ int main()
     Hash* hash = criar_hash(n);
 
     //strings para ler cada padrão e o texto completo
-    char padrao[50];
-    char texto[40000];
+    char* padrao = calloc(50, sizeof(char));
+    if (padrao == NULL) {
+        printf("Falha ao alocar string para armazenar os padrões \n");
+        exit(1);
+    }
+
+    char* texto = calloc(40000, sizeof(char));
+    if (texto == NULL) {
+        printf("Falha ao alocar string para armazenar o texto \n");
+        exit(1);
+    }
 
     //vetor de inteiros para manter a posicao de inserção dos padrões
-    int* qtde_padroes = malloc(n * sizeof(int));
-    int* tamanhos = malloc(n * sizeof(int));
+    int* qtde_ocorrencias = calloc(n, sizeof(int));
+    if (qtde_ocorrencias == NULL) {
+        printf("Falha ao alocar vetor para armazenar a quantidade de ocorrências \n");
+        exit(1);
+    }
+
+    int* tamanhos = calloc(n, sizeof(int));
+    if (tamanhos == NULL) {
+        printf("Falha ao alocar vetor para armazenar o tamanho dos padrões \n");
+        exit(1);
+    }
+
+    int tamanhos_diferentes = 0;
 
     //adicionando padrão no vetor de strings e no hash
     for (int i = 0; i < n; i++) {
         scanf("%s\n", padrao);
-        qtde_padroes[i] = 0;
-        tamanhos[i] = strlen(padrao);
+        qtde_ocorrencias[i] = 0;
+
+        //verificar se o tamanho já está inserido no vetor de tamanhos
+        if (esta_inserido(tamanhos, strlen(padrao), tamanhos_diferentes) == 0) {
+            tamanhos[tamanhos_diferentes++] = strlen(padrao);
+        }
+
         inserir(hash, padrao, i);
     }
 
     scanf("%s\n", texto);
 
+    get_qtde_ocorrencias(hash, tamanhos, texto, qtde_ocorrencias, tamanhos_diferentes);
+
     for (int i = 0; i < n; i++) {
-        qtde_padroes[i] = get_qtde_ocorrencias(hash, tamanhos[i], i, texto);
         //imprimindo número de ocorrências para cada padrão
-        printf("%d\n", qtde_padroes[i]);
+        printf("%d\n", qtde_ocorrencias[i]);
     }
 
     //liberando memória
     destruir_hash(hash);
-    free(qtde_padroes);
+    free(padrao);
+    free(texto);
+    free(qtde_ocorrencias);
     free(tamanhos);
 
    return EXIT_SUCCESS;
